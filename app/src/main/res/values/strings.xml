@@ -6,6 +6,7 @@
     <string name="btn_aa">テスト２</string>
     <string name="btn_settei">設定</string>
     <string name="btn_Logout">ログアウト</string>
+    <string name="btn_kaijo">解除</string>
     <string name="btn_Back">戻る</string>
     <string name="btn_Next">次へ</string>
     <string name="txt_Null"></string>

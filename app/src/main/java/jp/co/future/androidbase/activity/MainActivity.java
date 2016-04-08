@@ -13,6 +13,7 @@ import jp.co.future.androidbase.fragment.MainActivityFragment;
 
 public class MainActivity extends AppCompatActivity implements MainActivityFragment.OnFragmentInteractionListener {
 
+
     /** ログ出力用タグ */
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -103,5 +104,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 //        startActivity(intent);
     }
 
+    @Override
+    public void onKaijoClicked(View v) {
+
+    }
 
 }

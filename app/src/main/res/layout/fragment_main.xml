@@ -85,6 +85,19 @@
             android:drawableLeft="@drawable/cog"
             android:drawablePadding="-50dp"
             android:text="@string/btn_settei" />
+
+        <!-- 解除 -->
+        <Button
+            android:id="@+id/btn_kaijo"
+            style="@style/BodyButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/list"
+            android:drawablePadding="-50dp"
+            android:text="@string/btn_kaijo" />
     </LinearLayout>
 
 </RelativeLayout>

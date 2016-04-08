@@ -66,6 +66,9 @@ public class MainActivityFragment extends Fragment {
         // 設定ボタンがクリックされた時の処理
         rootView.findViewById(R.id.btn_settei).setOnClickListener(buttonClickListener);
 
+        // 設定ボタンがクリックされた時の処理
+        rootView.findViewById(R.id.btn_kaijo).setOnClickListener(buttonClickListener);
+
         return rootView;
     }
 
@@ -121,7 +124,8 @@ public class MainActivityFragment extends Fragment {
         // 一ボタンがクリックされた時
         public void onSetteiClicked(View v);
 
-
+        // 一ボタンがクリックされた時
+        public void onKaijoClicked(View v);
 
     }
 }
