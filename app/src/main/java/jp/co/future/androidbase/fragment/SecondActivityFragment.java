@@ -7,16 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import jp.co.future.androidbase.R;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class SecondActivityFragment extends Fragment {
 
-    public MainActivityFragment() {
+    public SecondActivityFragment() {
     }
 
     private static final String ARG_PARAM1 = "param1";
@@ -38,8 +37,8 @@ public class MainActivityFragment extends Fragment {
      *            Parameter 2.
      * @return A new instance of fragment TopMenuFragment.
      */
-    public static MainActivityFragment newInstance(String param1, String param2) {
-        MainActivityFragment fragment = new MainActivityFragment();
+    public static SecondActivityFragment newInstance(String param1, String param2) {
+        SecondActivityFragment fragment = new SecondActivityFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -58,7 +57,7 @@ public class MainActivityFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_second, container, false);
         //setTextSizeByInch(rootView);
         // ボタンがクリックされた時の処理
         rootView.findViewById(R.id.btn_aa).setOnClickListener(buttonClickListener);

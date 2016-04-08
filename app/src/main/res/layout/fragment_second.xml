@@ -3,7 +3,7 @@
     android:id="@+id/container_top"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="jp.co.future.androidbase.activity.MainActivity"
+    tools:context="jp.co.future.androidbase.activity.SecondActivity"
     tools:ignore="MergeRootFrame" >
 
     <!-- フッター -->
@@ -82,7 +82,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:drawableLeft="@drawable/cog"
+            android:drawableLeft="@drawable/list"
             android:drawablePadding="-50dp"
             android:text="@string/btn_settei" />
 
@@ -94,7 +94,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:drawableLeft="@drawable/boxes128"
+            android:drawableLeft="@drawable/printer"
             android:drawablePadding="-50dp"
             android:text="@string/btn_add" />
 
