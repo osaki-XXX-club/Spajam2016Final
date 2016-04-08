@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
     /** クラス名 */
     private static final String className = MainActivity.class.getName().toString();
 
+
+
     /** バインドするフラグメント */
     private MainActivityFragment fragment;
 
@@ -101,6 +103,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 //        intent.putExtras(bundle);
 //        // 次画面のアクティビティ起動
 //        startActivity(intent);
+    }
+
+    @Override
+    public void onAddClicked(View v) {
+
     }
 
 

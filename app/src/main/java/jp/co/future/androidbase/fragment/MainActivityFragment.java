@@ -66,6 +66,10 @@ public class MainActivityFragment extends Fragment {
         // 設定ボタンがクリックされた時の処理
         rootView.findViewById(R.id.btn_settei).setOnClickListener(buttonClickListener);
 
+
+        // 設定ボタンがクリックされた時の処理
+        rootView.findViewById(R.id.btn_add).setOnClickListener(buttonClickListener);
+
         return rootView;
     }
 
@@ -85,6 +89,8 @@ public class MainActivityFragment extends Fragment {
                 mListener.onAaClicked(v);
             } else if (id == R.id.btn_settei) {
                 mListener.onSetteiClicked(v);
+            }else if (id == R.id.btn_add) {
+                mListener.onAddClicked(v);
             }
 
         }
@@ -120,6 +126,9 @@ public class MainActivityFragment extends Fragment {
 
         // 一ボタンがクリックされた時
         public void onSetteiClicked(View v);
+
+        // 一ボタンがクリックされた時
+        public void onAddClicked(View v);
 
 
 
