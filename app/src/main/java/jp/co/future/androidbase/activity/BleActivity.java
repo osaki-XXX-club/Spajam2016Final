@@ -1,9 +1,13 @@
 package jp.co.future.androidbase.activity;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +26,7 @@ import java.util.ArrayList;
 
 import jp.co.future.androidbase.R;
 import jp.co.future.androidbase.fragment.BleActivityFragment;
+import jp.co.future.androidbase.service.BlePeriodicService;
 import jp.co.future.androidbase.util.BleUtil;
 import jp.co.future.androidbase.util.ScannedDevice;
 
@@ -48,6 +53,16 @@ public class BleActivity extends AppCompatActivity implements BleActivityFragmen
     // 10秒後にスキャンを止める用の定数
     private static final long SCAN_PERIOD = 10000;
 
+    private static final BlePeriodicService blePeriodicService = new BlePeriodicService();
+
+    private static String device;
+    private static int rssi;
+
+    /** ブロードキャストレシーバ */
+    private BroadcastReceiver bleReceiver;
+
+    /** フィルター対象のIntent */
+    private static final String BLE_CALLBACK_INTENT = "jp.co.future.service.BlePeriodicService";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +80,31 @@ public class BleActivity extends AppCompatActivity implements BleActivityFragmen
 
         init();
 
+        // bleを受診した時のレシーバ
+        bleReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                // 前画面からパラメータを取得する
+                device = intent.getStringExtra("device");
+                rssi = intent.getIntExtra("rssi",0);
+                Log.d(TAG, "device =" + device);
+            }
+        };
+
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        // 強制ログアウトチェック
+//        autoLogout();
+//        savePreActionTime();
+
+        super.onResume();
+        // レシーバの登録
+        registerReceiver(bleReceiver, new IntentFilter(BLE_CALLBACK_INTENT));
+
 
     }
 
@@ -134,6 +168,12 @@ public class BleActivity extends AppCompatActivity implements BleActivityFragmen
             mBluetoothAdapter = bluetoothManager.getAdapter();
         }
 
+        if (mBluetoothAdapter.getScanMode() !=
+                BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
+            Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
+            startActivity(discoverableIntent);
+        }
 
         // listviewの初期化
         ListView deviceListView = (ListView) findViewById(R.id.list);
@@ -238,9 +278,23 @@ public class BleActivity extends AppCompatActivity implements BleActivityFragmen
     @Override
     public void onBleSearchClicked(View v) {
         // BLE検索ボタンが押された時の処理
-        startScan();
+        //startScan();
+        Log.d(TAG, "clickBLE検索ボタン");
+        blePeriodicService.startResident(v.getContext());
 
+    }
 
+    @Override
+    public void onBleSearchStopClicked(View v) {
+        Log.d(TAG, "clickBLE検索ストップボタン");
+        blePeriodicService.stopResident(v.getContext());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // ブロードキャストレシーバの解除
+        unregisterReceiver(bleReceiver);
     }
 
 

@@ -32,7 +32,8 @@ public class BleActivityFragment extends Fragment {
         // BLE検索ボタンがクリックされた時の処理
         rootView.findViewById(R.id.btn_BleSearch).setOnClickListener(buttonClickListener);
 
-
+    // BLE検索ストップボタンがクリックされた時の処理
+        rootView.findViewById(R.id.btn_BleSearch_stop).setOnClickListener(buttonClickListener);
 
         return rootView;
     }
@@ -51,6 +52,8 @@ public class BleActivityFragment extends Fragment {
             int id = v.getId();
             if (id == R.id.btn_BleSearch) {
                 mListener.onBleSearchClicked(v);
+            }else if (id == R.id.btn_BleSearch_stop){
+                mListener.onBleSearchStopClicked(v);
             }
 
         }
@@ -83,7 +86,7 @@ public class BleActivityFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // BLE検索ボタンがクリックされた時
         public void onBleSearchClicked(View v);
-
+        public void onBleSearchStopClicked(View v);
 
 
     }
