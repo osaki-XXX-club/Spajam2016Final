@@ -14,8 +14,7 @@
         android:theme="@style/Theme.AppCompat">
         <activity
             android:name=".activity.MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,15 +22,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.SpiderActivity"
-            android:label="@string/title_spider"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".activity.UserDetailActivity"
+            android:label="@string/title_spider">
         </activity>
         <activity android:name=".activity.BleActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <activity android:name=".activity.DeviceActivity" />
+
     </application>
 
 </manifest>

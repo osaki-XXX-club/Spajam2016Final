@@ -1,0 +1,185 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container_top"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.UserDetailActivity"
+    tools:ignore="MergeRootFrame">
+
+    <!-- フッター -->
+
+    <LinearLayout
+        android:id="@+id/footer"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/mainbg"
+        android:orientation="horizontal">
+
+        <!-- 興味なし -->
+
+
+
+        <com.gc.materialdesign.views.ButtonFlat
+            android:id="@+id/btn_notinterest"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/DeepSkyBlue"
+            android:text="興味なし" />
+
+        <!-- 興味あり -->
+
+        <com.gc.materialdesign.views.ButtonFlat
+            android:id="@+id/btn_interest"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/DeepSkyBlue"
+            android:text="興味あり" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/body"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/footer"
+        android:background="@color/mainbg"
+        android:orientation="vertical">
+
+
+        <com.github.ksoichiro.android.observablescrollview.ObservableScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="false">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+
+                    <!-- 写真 -->
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/imgv_user"
+                        android:layout_width="140dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/user1"
+                        app:civ_border_width="2dp"
+                        app:civ_border_color="#FF000000"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <!-- name -->
+
+                        <TextView
+                            android:id="@+id/txt_username"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            android:text="@string/btn_add"
+                            android:textColor="@color/black"
+                            android:textSize="20sp"
+                            android:textStyle="bold"/>
+
+                        <!-- 会社 -->
+
+                        <TextView
+                            android:id="@+id/user_company"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:text="@string/btn_add"
+                            android:textStyle="normal" />
+
+                        <!-- 役職 -->
+
+                        <TextView
+                            android:id="@+id/user_jobtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:text="@string/btn_add"
+                            android:textStyle="normal" />
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <!-- ラベル -->
+
+                <TextView
+                    android:id="@+id/txt_label1"
+                    style="@style/ListViewHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="2dp"
+                    android:paddingTop="2dp"
+                    android:paddingLeft="5dp"
+                    android:text="職種タイプ" />
+
+                <!-- 職種タイプ -->
+
+                <TextView
+                    android:id="@+id/txt_jobtype"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_weight="4"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:textColor="@color/black"
+                    android:gravity="center_vertical"
+                    android:text="ああああああああああ" />
+
+                <!-- ラベル -->
+
+                <TextView
+                    android:id="@+id/txt_label2"
+                    style="@style/ListViewHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="2dp"
+                    android:paddingTop="2dp"
+                    android:paddingLeft="5dp"
+                    android:text="自己紹介" />
+
+                <!-- 職種タイプ -->
+
+                <TextView
+                    android:id="@+id/txt_intoroduce"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_weight="4"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:text="ああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ" />
+
+
+
+            </LinearLayout>
+
+
+        </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
+    </LinearLayout>
+
+</RelativeLayout>

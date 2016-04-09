@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
     public void onAaClicked(View v) {
         // 画面へ遷移
         // インテントのインスタンス生成
-        Intent intent = new Intent(this, SpiderActivity.class);
+        Intent intent = new Intent(this, UserDetailActivity.class);
 //        intent.putExtra("mode", CommonKbnConst.VAL_MODE_HAITATU);
 //        intent.putExtra("subMode", CommonKbnConst.VAL_MODE_HAITATU);
 //        intent.putExtra("clear", true);

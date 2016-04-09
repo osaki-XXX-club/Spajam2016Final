@@ -13,9 +13,9 @@ import jp.co.future.androidbase.R;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class SpiderActivityFragment extends Fragment {
+public class UserDetailActivityFragment extends Fragment {
 
-    public SpiderActivityFragment() {
+    public UserDetailActivityFragment() {
     }
 
     private static final String ARG_PARAM1 = "param1";
@@ -37,8 +37,8 @@ public class SpiderActivityFragment extends Fragment {
      *            Parameter 2.
      * @return A new instance of fragment TopMenuFragment.
      */
-    public static SpiderActivityFragment newInstance(String param1, String param2) {
-        SpiderActivityFragment fragment = new SpiderActivityFragment();
+    public static UserDetailActivityFragment newInstance(String param1, String param2) {
+        UserDetailActivityFragment fragment = new UserDetailActivityFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -57,10 +57,10 @@ public class SpiderActivityFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_spider, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_userdetail, container, false);
         //setTextSizeByInch(rootView);
         // ボタンがクリックされた時の処理
-        rootView.findViewById(R.id.btn_aa).setOnClickListener(buttonClickListener);
+        //rootView.findViewById(R.id.btn_aa).setOnClickListener(buttonClickListener);
 
         // 設定ボタンがクリックされた時の処理
         //rootView.findViewById(R.id.btn_settei).setOnClickListener(buttonClickListener);
