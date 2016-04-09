@@ -5,7 +5,14 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,8 +21,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.Types.BoomType;
@@ -29,8 +40,11 @@ import java.util.Random;
 
 import jp.co.future.androidbase.R;
 import jp.co.future.androidbase.fragment.MainActivityFragment;
+import jp.co.future.androidbase.service.BlePeriodicService;
+import jp.co.future.androidbase.util.BleUtil;
+import jp.co.future.androidbase.util.ScannedDevice;
 
-public class MainActivity extends AppCompatActivity implements MainActivityFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements MainActivityFragment.OnFragmentInteractionListener ,BluetoothAdapter.LeScanCallback{
 
 
     /**
@@ -42,6 +56,36 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
      * クラス名
      */
     private static final String className = MainActivity.class.getName().toString();
+
+    /* BLE接続のアダプター */
+    private BluetoothAdapter mBluetoothAdapter;
+
+    /* BLEデバイス一覧表示リストのデータを扱うアダプター */
+    private DeviceAdapter mDeviceAdapter;
+
+    /* startActivityForResultのためのリクエストコード */
+    final int REQUEST_ENABLE_BT = 1;
+
+    /* スキャンしているかどうかのフラグ */
+    private boolean mIsScanning;
+
+    /* 非同期処理用のハンドラー */
+    private Handler mHandler = new Handler();
+
+    // 10秒後にスキャンを止める用の定数
+    private static final long SCAN_PERIOD = 10000;
+
+    private static final BlePeriodicService blePeriodicService = new BlePeriodicService();
+
+    private static String device;
+    private static int rssi;
+
+    /** ブロードキャストレシーバ */
+    private BroadcastReceiver bleReceiver;
+
+    /** フィルター対象のIntent */
+    private static final String BLE_CALLBACK_INTENT = "jp.co.future.service.BlePeriodicService";
+
 
     /**
      * バインドするフラグメント
@@ -71,6 +115,26 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
             transaction.commit();
         }
 
+        // Use this check to determine whether BLE is supported on the device. Then
+        // you can selectively disable BLE-related features.
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
+        init();
+
+        // bleを受診した時のレシーバ
+        bleReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                // 前画面からパラメータを取得する
+                device = intent.getStringExtra("device");
+                rssi = intent.getIntExtra("rssi",0);
+                Log.d(TAG, "device =" + device);
+            }
+        };
+
 
     }
 
@@ -78,6 +142,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
     protected void onResume() {
 
         super.onResume();
+
+        // レシーバの登録
+        registerReceiver(bleReceiver, new IntentFilter(BLE_CALLBACK_INTENT));
+
 
         //メニューボタン
         boomMenuButton = (BoomMenuButton) findViewById(R.id.boom);
@@ -95,11 +163,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
                         foundDevice.setVisibility(View.INVISIBLE);
 
                         //TODO BLE止める
+                        blePeriodicService.stopResident(getApplicationContext());
                     } else {
                         rippleBackground.startRippleAnimation();
                         blesearch = true;
 
                         //TODO BLEスタート
+                        blePeriodicService.startResident(getApplicationContext());
                     }
 
 
@@ -129,12 +199,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
                     foundDevice.setVisibility(View.INVISIBLE);
 
                     //TODO BLE止める
+                    blePeriodicService.stopResident(getApplicationContext());
 
                 } else {
 
                     blesearch = true;
 
                     //TODO BLEスタート
+                    blePeriodicService.startResident(getApplicationContext());
+
                     rippleBackground.startRippleAnimation();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -241,6 +314,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
     @Override
     public void onPause() {
         super.onPause();
+
+        // ブロードキャストレシーバの解除
+        unregisterReceiver(bleReceiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        stopScan();
     }
 
     @Override
@@ -256,6 +339,109 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         startActivity(intent);
 
     }
+
+    /*
+ 初期化処理
+ */
+    private void init() {
+
+        // BLE check
+        // 端末がBLEに対応しているかどうかチェック
+        if (!BleUtil.isBLESupported(this)) {
+            Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        // BT check
+        BluetoothManager bluetoothManager = BleUtil.getManager(this);
+        if (bluetoothManager != null) {
+            Log.d(TAG, "mBluetoothAdapter取得");
+            mBluetoothAdapter = bluetoothManager.getAdapter();
+        }
+
+        if (mBluetoothAdapter.getScanMode() !=
+                BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
+            Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
+            startActivity(discoverableIntent);
+        }
+
+
+        stopScan();
+    }
+
+    /*
+    BLEデバイスのスキャンスタート
+     */
+    private void startScan() {
+
+        // 端末のBluetoothがONになっていない場合、設定をONにする
+        if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
+            //Toast.makeText(this, R.string.bt_unavailable, Toast.LENGTH_SHORT).show();
+
+            //BLEをONにする画面に飛ばす
+            Log.d(TAG, "BLEをONにする");
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            //finish();
+            return;
+        }
+
+        if ((mBluetoothAdapter != null) && (!mIsScanning)) {
+
+            // スキャンを止める処理をSCAN_PERIODミリ秒後に入れる
+            // スキャン処理はバッテリー消費が大きいため
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    stopScan();
+                }
+            }, SCAN_PERIOD);
+
+            Log.d(TAG, "スキャンスタート");
+            // BLE検索ボタンの表示文言更新
+            Button btnBleSearch = (Button) findViewById(R.id.btn_BleSearch);
+            btnBleSearch.setText("BLEデバイス検索中");
+            // 一覧からデバイスを削除
+            mDeviceAdapter.clear();
+
+            mBluetoothAdapter.startLeScan(this);
+            mIsScanning = true;
+            setProgressBarIndeterminateVisibility(true);
+            invalidateOptionsMenu();
+        }
+    }
+
+    /*
+    BLEデバイスのスキャンストップ
+     */
+    private void stopScan() {
+        if (mBluetoothAdapter != null) {
+            Log.d(TAG, "スキャンストップ");
+            // BLE検索ボタンの表示文言更新
+            mBluetoothAdapter.stopLeScan(this);
+        }
+        mIsScanning = false;
+        setProgressBarIndeterminateVisibility(false);
+        invalidateOptionsMenu();
+    }
+
+    /*
+    スキャン結果のコールバック
+     */
+    @Override
+    public void onLeScan(final BluetoothDevice newDeivce, final int newRssi,
+                         final byte[] newScanRecord) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // スキャン結果を一覧に追加する
+                mDeviceAdapter.update(newDeivce, newRssi, newScanRecord);
+            }
+        });
+    }
+
 
     //    @Override
 //    public void onAaClicked(View v) {
