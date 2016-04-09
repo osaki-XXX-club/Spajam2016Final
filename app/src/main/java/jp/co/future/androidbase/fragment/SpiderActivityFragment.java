@@ -7,16 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import jp.co.future.androidbase.R;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class SpiderActivityFragment extends Fragment {
 
-    public MainActivityFragment() {
+    public SpiderActivityFragment() {
     }
 
     private static final String ARG_PARAM1 = "param1";
@@ -38,8 +37,8 @@ public class MainActivityFragment extends Fragment {
      *            Parameter 2.
      * @return A new instance of fragment TopMenuFragment.
      */
-    public static MainActivityFragment newInstance(String param1, String param2) {
-        MainActivityFragment fragment = new MainActivityFragment();
+    public static SpiderActivityFragment newInstance(String param1, String param2) {
+        SpiderActivityFragment fragment = new SpiderActivityFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -58,16 +57,16 @@ public class MainActivityFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_spider, container, false);
         //setTextSizeByInch(rootView);
         // ボタンがクリックされた時の処理
         rootView.findViewById(R.id.btn_aa).setOnClickListener(buttonClickListener);
 
         // 設定ボタンがクリックされた時の処理
-        rootView.findViewById(R.id.btn_settei).setOnClickListener(buttonClickListener);
+        //rootView.findViewById(R.id.btn_settei).setOnClickListener(buttonClickListener);
 
         // 設定ボタンがクリックされた時の処理
-        rootView.findViewById(R.id.btn_kaijo).setOnClickListener(buttonClickListener);
+        //rootView.findViewById(R.id.btn_kaijo).setOnClickListener(buttonClickListener);
 
         return rootView;
     }
@@ -86,8 +85,8 @@ public class MainActivityFragment extends Fragment {
             int id = v.getId();
             if (id == R.id.btn_aa) {
                 mListener.onAaClicked(v);
-            } else if (id == R.id.btn_settei) {
-                mListener.onSetteiClicked(v);
+//            } else if (id == R.id.btn_settei) {
+//                mListener.onSetteiClicked(v);
             }
 
         }
@@ -118,14 +117,10 @@ public class MainActivityFragment extends Fragment {
      * Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
+
         // ボタンがクリックされた時
         public void onAaClicked(View v);
 
-        // 一ボタンがクリックされた時
-        public void onSetteiClicked(View v);
-
-        // 一ボタンがクリックされた時
-        public void onKaijoClicked(View v);
 
     }
 }

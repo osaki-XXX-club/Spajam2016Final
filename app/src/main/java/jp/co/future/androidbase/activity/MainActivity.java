@@ -2,6 +2,7 @@ package jp.co.future.androidbase.activity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -13,13 +14,12 @@ import jp.co.future.androidbase.fragment.MainActivityFragment;
 
 public class MainActivity extends AppCompatActivity implements MainActivityFragment.OnFragmentInteractionListener {
 
+
     /** ログ出力用タグ */
     private static final String TAG = MainActivity.class.getSimpleName();
 
     /** クラス名 */
     private static final String className = MainActivity.class.getName().toString();
-
-
 
     /** バインドするフラグメント */
     private MainActivityFragment fragment;
@@ -82,12 +82,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
     public void onAaClicked(View v) {
         // 画面へ遷移
         // インテントのインスタンス生成
-//        Intent intent = new Intent(this, HogeActivity.class);
+        Intent intent = new Intent(this, SpiderActivity.class);
 //        intent.putExtra("mode", CommonKbnConst.VAL_MODE_HAITATU);
 //        intent.putExtra("subMode", CommonKbnConst.VAL_MODE_HAITATU);
 //        intent.putExtra("clear", true);
         // 次画面のアクティビティ起動
-        //startActivity(intent);
+        startActivity(intent);
 
     }
 
@@ -95,6 +95,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 
     @Override
     public void onSetteiClicked(View v) {
+        Intent intent = new Intent(this, BleActivity.class);
+        startActivity(intent);
 //        // インテントのインスタンス生成
 //        Intent intent = new Intent(this, FugaActivity.class);
 //        // インテントに値を設定
@@ -106,9 +108,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
     }
 
     @Override
-    public void onAddClicked(View v) {
+    public void onKaijoClicked(View v) {
 
     }
-
 
 }

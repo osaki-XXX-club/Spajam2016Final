@@ -2,15 +2,30 @@
 <resources>
 
     <string name="app_name">Base</string>
-    <string name="action_settings">テスト１</string>
+    <string name="title_spider">雲の糸</string>
+    <string name="btn_ble">BLE検索</string>
     <string name="btn_aa">テスト２</string>
     <string name="btn_settei">設定</string>
     <string name="btn_add">追加</string>
     <string name="btn_Logout">ログアウト</string>
+    <string name="btn_kaijo">解除</string>
     <string name="btn_Back">戻る</string>
     <string name="btn_Next">次へ</string>
     <string name="txt_Null"></string>
     <string name="title_activity_top_menu">メニュー</string>
+
+
+    <string name="ble_not_supported">BLEがサポートされていません！</string>
+    <string name="label_CodeType">CODABAR</string>
+    <string name="action_settings">設定</string>
+
+    <string name="btn_BleSearch">BLEデバイス検索</string>
+    <string name="bt_unavailable">Bluetooth unavailable</string>
+    <!-- Device -->
+    <string name="read_manufacturer_name">Read Manufacturer Name</string>
+    <string name="read_serial_number">Read Serial Number</string>
+    <string name="write_alert_level">Write Alert Level</string>
+
 
 
     <string-array name="haitatsusaki">
