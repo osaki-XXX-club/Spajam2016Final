@@ -92,9 +92,20 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="left"
-                            android:text="@string/btn_add"
+                            android:text=""
                             android:textColor="@color/black"
                             android:textSize="20sp"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/txt_userage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            android:text=""
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
                             android:textStyle="bold"/>
 
                         <!-- 会社 -->
@@ -106,7 +117,7 @@
                             android:layout_weight="1"
                             android:textColor="@color/black"
                             android:textSize="16sp"
-                            android:text="@string/btn_add"
+                            android:text=""
                             android:textStyle="normal" />
 
                         <!-- 役職 -->
@@ -118,41 +129,16 @@
                             android:layout_weight="1"
                             android:textColor="@color/black"
                             android:textSize="16sp"
-                            android:text="@string/btn_add"
+                            android:text="@string/user_jobtitle"
                             android:textStyle="normal" />
                     </LinearLayout>
                 </LinearLayout>
 
-
                 <!-- ラベル -->
-
-                <TextView
-                    android:id="@+id/txt_label1"
-                    style="@style/ListViewHeader"
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:layout_marginTop="2dp"
-                    android:paddingTop="2dp"
-                    android:paddingLeft="5dp"
-                    android:text="職種タイプ" />
 
                 <!-- 職種タイプ -->
-
                 <TextView
-                    android:id="@+id/txt_jobtype"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_weight="4"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:textColor="@color/black"
-                    android:gravity="center_vertical"
-                    android:text="ああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ" />
-
-                <!-- ラベル -->
-
-                <TextView
-                    android:id="@+id/txt_label2"
+                    android:id="@+id/label_introfuce"
                     style="@style/ListViewHeader"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
@@ -160,8 +146,6 @@
                     android:paddingTop="2dp"
                     android:paddingLeft="5dp"
                     android:text="自己紹介" />
-
-                <!-- 職種タイプ -->
 
                 <TextView
                     android:id="@+id/txt_intoroduce"
@@ -172,8 +156,31 @@
                     android:paddingRight="5dp"
                     android:gravity="center_vertical"
                     android:textColor="@color/black"
-                    android:text="ああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ" />
+                    android:text="未記入" />
 
+                <TextView
+                    android:id="@+id/label_qiita_contribution"
+                    style="@style/ListViewHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="2dp"
+                    android:paddingTop="2dp"
+                    android:paddingLeft="5dp"
+                    android:text="Qiitaコントリビューション" />
+
+                <TextView
+                    android:id="@+id/txt_contribution"
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:layout_weight="4"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:text="" />
+
+
+                <!-- 記事数 -->
                 <TextView
                     android:id="@+id/txt_label3"
                     style="@style/ListViewHeader"
@@ -182,22 +189,83 @@
                     android:layout_marginTop="2dp"
                     android:paddingTop="2dp"
                     android:paddingLeft="5dp"
-                    android:text="自己紹介" />
-
-                <!-- 職種タイプ -->
+                    android:text="Qiita記事数" />
 
                 <TextView
                     android:id="@+id/txt_intoroduce3"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="25dp"
                     android:layout_weight="4"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:gravity="center_vertical"
                     android:textColor="@color/black"
-                    android:text="ああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ" />
+                    android:text="" />
+
+                <!-- フォロワー数 -->
+                <TextView
+                    android:id="@+id/txt_label4"
+                    style="@style/ListViewHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="2dp"
+                    android:paddingTop="2dp"
+                    android:paddingLeft="5dp"
+                    android:text="Qiitaフォロワー数" />
+
+                <TextView
+                    android:id="@+id/txt_intoroduce4"
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:layout_weight="4"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/txt_label5"
+                    style="@style/ListViewHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="2dp"
+                    android:paddingTop="2dp"
+                    android:paddingLeft="5dp"
+                    android:text="GitHubリポジトリ数" />
+
+                <TextView
+                    android:id="@+id/txt_intoroduce5"
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:layout_weight="4"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:text="" />
 
 
+                <TextView
+                    android:id="@+id/txt_label6"
+                    style="@style/ListViewHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="2dp"
+                    android:paddingTop="2dp"
+                    android:paddingLeft="5dp"
+                    android:text="Githubフォロワー数" />
+
+                <TextView
+                    android:id="@+id/txt_intoroduce6"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_weight="4"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:text="" />
 
             </LinearLayout>
 
