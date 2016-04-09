@@ -107,7 +107,7 @@ public class DeviceActivity extends Activity implements View.OnClickListener {
 
                 // デバイスのcharacteristicとdescriptorをログに表示
                 // どんなデータが飛んできてるかチェック
-                Log.i(TAG, "service.getUuid:" + service.getUuid());
+                Log.i(TAG, "jp.co.future.androidbase.service.getUuid:" + service.getUuid());
                 for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
                     Log.i(TAG, "characteristic UUID:" + characteristic.getUuid());
                     int charaProp = characteristic.getProperties();
@@ -121,12 +121,12 @@ public class DeviceActivity extends Activity implements View.OnClickListener {
 
                     }
 
-//                    Log.i(TAG, "value:" + service.getCharacteristic(UUID.fromString(characteristic.getUuid().toString())));
+//                    Log.i(TAG, "value:" + jp.co.future.androidbase.service.getCharacteristic(UUID.fromString(characteristic.getUuid().toString())));
 
                 }
 
-//                Log.i(TAG, "CHAR_MANUFACTURER_NAME_STRING:" + service.getCharacteristic(UUID.fromString(BleUuid.CHAR_MANUFACTURER_NAME_STRING)));
-//                Log.i(TAG, "CHAR_SERIAL_NUMBER_STRING:" + service.getCharacteristic(UUID.fromString(BleUuid.CHAR_SERIAL_NUMBER_STRING)));
+//                Log.i(TAG, "CHAR_MANUFACTURER_NAME_STRING:" + jp.co.future.androidbase.service.getCharacteristic(UUID.fromString(BleUuid.CHAR_MANUFACTURER_NAME_STRING)));
+//                Log.i(TAG, "CHAR_SERIAL_NUMBER_STRING:" + jp.co.future.androidbase.service.getCharacteristic(UUID.fromString(BleUuid.CHAR_SERIAL_NUMBER_STRING)));
 
                 // デバイス情報のサービスの場合
                 if (BleUuid.SERVICE_DEVICE_INFORMATION.equalsIgnoreCase(service
@@ -160,7 +160,7 @@ public class DeviceActivity extends Activity implements View.OnClickListener {
                         ;
                     });
                 }
-//                if (BleUuid.SERVICE_IMMEDIATE_ALERT.equalsIgnoreCase(service
+//                if (BleUuid.SERVICE_IMMEDIATE_ALERT.equalsIgnoreCase(jp.co.future.androidbase.service
 //                        .getUuid().toString())) {
 //                    runOnUiThread(new Runnable() {
 //                        public void run() {
@@ -169,7 +169,7 @@ public class DeviceActivity extends Activity implements View.OnClickListener {
 //
 //                        ;
 //                    });
-//                    mWriteAlertLevelButton.setTag(service
+//                    mWriteAlertLevelButton.setTag(jp.co.future.androidbase.service
 //                            .getCharacteristic(UUID
 //                                    .fromString(BleUuid.CHAR_ALERT_LEVEL)));
 //                }

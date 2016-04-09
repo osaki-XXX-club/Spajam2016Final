@@ -67,6 +67,16 @@
             android:drawablePadding="-50dp"
             android:text="@string/btn_BleSearch" />
 
+        <Button
+            android:id="@+id/btn_BleSearch_stop"
+            style="@style/BodyButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:drawablePadding="-50dp"
+            android:text="BLEデバイスストップ" />
+
         <ListView
             android:id="@+id/list"
             android:layout_width="fill_parent"
@@ -74,6 +84,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:drawablePadding="-50dp" />
+
 
 
     </LinearLayout>
