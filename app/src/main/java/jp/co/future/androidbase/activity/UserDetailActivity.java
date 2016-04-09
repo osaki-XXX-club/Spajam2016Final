@@ -79,7 +79,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetailA
 
         // Github情報の表示
         GitHubClient gitHubClient = ServiceGenerator.createService(GitHubClient.class);
-        Call<GithubUser> githubCall = gitHubClient.uxser(userId);
+        Call<GithubUser> githubCall = gitHubClient.user(userId);
 
         githubCall.enqueue(new Callback<GithubUser>() {
             @Override

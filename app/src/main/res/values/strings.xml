@@ -26,6 +26,7 @@
     <string name="read_serial_number">Read Serial Number</string>
     <string name="write_alert_level">Write Alert Level</string>
 
+    <string name="user_jobtitle">ソフトウェアエンジニア</string>
 
 
     <string-array name="haitatsusaki">
