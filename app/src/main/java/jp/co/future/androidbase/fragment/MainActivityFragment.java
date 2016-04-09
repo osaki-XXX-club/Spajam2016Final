@@ -64,7 +64,7 @@ public class MainActivityFragment extends Fragment {
         rootView.findViewById(R.id.foundDevice).setOnClickListener(buttonClickListener);
 
         // 設定ボタンがクリックされた時の処理
-        //rootView.findViewById(R.id.btn_settei).setOnClickListener(buttonClickListener);
+        rootView.findViewById(R.id.centerImage).setOnClickListener(buttonClickListener);
 
         // 設定ボタンがクリックされた時の処理
         //rootView.findViewById(R.id.btn_kaijo).setOnClickListener(buttonClickListener);
@@ -86,8 +86,8 @@ public class MainActivityFragment extends Fragment {
             int id = v.getId();
             if (id == R.id.foundDevice) {
                 mListener.onFoundDeviceClicked(v);
-//            } else if (id == R.id.btn_settei) {
-//                mListener.onSetteiClicked(v);
+            } else if (id == R.id.centerImage) {
+                mListener.onCenterImageClicked(v);
             }
 
         }
@@ -122,7 +122,7 @@ public class MainActivityFragment extends Fragment {
         public void onFoundDeviceClicked(View v);
 
         // 一ボタンがクリックされた時
-        //public void onSetteiClicked(View v);
+        public void onCenterImageClicked(View v);
 
         // 一ボタンがクリックされた時
         //public void onKaijoClicked(View v);

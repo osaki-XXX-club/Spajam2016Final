@@ -6,7 +6,6 @@ import android.animation.ObjectAnimator;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -21,10 +20,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -42,9 +39,8 @@ import jp.co.future.androidbase.R;
 import jp.co.future.androidbase.fragment.MainActivityFragment;
 import jp.co.future.androidbase.service.BlePeriodicService;
 import jp.co.future.androidbase.util.BleUtil;
-import jp.co.future.androidbase.util.ScannedDevice;
 
-public class MainActivity extends AppCompatActivity implements MainActivityFragment.OnFragmentInteractionListener ,BluetoothAdapter.LeScanCallback{
+public class MainActivity extends AppCompatActivity implements MainActivityFragment.OnFragmentInteractionListener{
 
 
     /**
@@ -185,41 +181,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         //BLEサーチ
         rippleBackground = (RippleBackground) findViewById(R.id.content);
 
-        final Handler handler = new Handler();
+
 
         foundDevice = (ImageView) findViewById(R.id.foundDevice);
 
-        ImageView button = (ImageView) findViewById(R.id.centerImage);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (blesearch) {
-                    rippleBackground.stopRippleAnimation();
-                    blesearch = false;
-                    foundDevice.setVisibility(View.INVISIBLE);
-
-                    //TODO BLE止める
-                    blePeriodicService.stopResident(getApplicationContext());
-
-                } else {
-
-                    blesearch = true;
-
-                    //TODO BLEスタート
-                    blePeriodicService.startResident(getApplicationContext());
-
-                    rippleBackground.startRippleAnimation();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            foundDevice();
-                        }
-                    }, 3000);
-
-                }
-
-            }
-        });
 
 
     }
@@ -323,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
     protected void onDestroy() {
         super.onDestroy();
 
-        stopScan();
+
     }
 
     @Override
@@ -368,79 +333,43 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         }
 
 
-        stopScan();
+
     }
 
-    /*
-    BLEデバイスのスキャンスタート
-     */
-    private void startScan() {
 
-        // 端末のBluetoothがONになっていない場合、設定をONにする
-        if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
-            //Toast.makeText(this, R.string.bt_unavailable, Toast.LENGTH_SHORT).show();
 
-            //BLEをONにする画面に飛ばす
-            Log.d(TAG, "BLEをONにする");
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-            //finish();
-            return;
-        }
 
-        if ((mBluetoothAdapter != null) && (!mIsScanning)) {
+    @Override
+    public void onCenterImageClicked(View v) {
+        if (blesearch) {
+            rippleBackground.stopRippleAnimation();
+            blesearch = false;
+            foundDevice.setVisibility(View.INVISIBLE);
 
-            // スキャンを止める処理をSCAN_PERIODミリ秒後に入れる
-            // スキャン処理はバッテリー消費が大きいため
-            mHandler.postDelayed(new Runnable() {
+            //TODO BLE止める
+            blePeriodicService.stopResident(v.getContext());
+
+        } else {
+
+            blesearch = true;
+
+            //TODO BLEスタート
+            blePeriodicService.startResident(v.getContext());
+
+            rippleBackground.startRippleAnimation();
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    stopScan();
+                    foundDevice();
                 }
-            }, SCAN_PERIOD);
+            }, 3000);
 
-            Log.d(TAG, "スキャンスタート");
-            // BLE検索ボタンの表示文言更新
-            Button btnBleSearch = (Button) findViewById(R.id.btn_BleSearch);
-            btnBleSearch.setText("BLEデバイス検索中");
-            // 一覧からデバイスを削除
-            mDeviceAdapter.clear();
-
-            mBluetoothAdapter.startLeScan(this);
-            mIsScanning = true;
-            setProgressBarIndeterminateVisibility(true);
-            invalidateOptionsMenu();
         }
+
     }
 
-    /*
-    BLEデバイスのスキャンストップ
-     */
-    private void stopScan() {
-        if (mBluetoothAdapter != null) {
-            Log.d(TAG, "スキャンストップ");
-            // BLE検索ボタンの表示文言更新
-            mBluetoothAdapter.stopLeScan(this);
-        }
-        mIsScanning = false;
-        setProgressBarIndeterminateVisibility(false);
-        invalidateOptionsMenu();
-    }
 
-    /*
-    スキャン結果のコールバック
-     */
-    @Override
-    public void onLeScan(final BluetoothDevice newDeivce, final int newRssi,
-                         final byte[] newScanRecord) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                // スキャン結果を一覧に追加する
-                mDeviceAdapter.update(newDeivce, newRssi, newScanRecord);
-            }
-        });
-    }
 
 
     //    @Override

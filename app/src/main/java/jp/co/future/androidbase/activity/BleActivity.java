@@ -33,7 +33,7 @@ import jp.co.future.androidbase.util.ScannedDevice;
 public class BleActivity extends AppCompatActivity implements BleActivityFragment.OnFragmentInteractionListener, BluetoothAdapter.LeScanCallback {
 
     /* ログ出力用のタグ */
-    private final String TAG = MainActivity.class.getSimpleName();
+    private final String TAG = BleActivity.class.getSimpleName();
 
     /* BLE接続のアダプター */
     private BluetoothAdapter mBluetoothAdapter;
@@ -231,8 +231,8 @@ public class BleActivity extends AppCompatActivity implements BleActivityFragmen
 
             Log.d(TAG, "スキャンスタート");
             // BLE検索ボタンの表示文言更新
-            Button btnBleSearch = (Button) findViewById(R.id.btn_BleSearch);
-            btnBleSearch.setText("BLEデバイス検索中");
+            //Button btnBleSearch = (Button) findViewById(R.id.btn_BleSearch);
+            //btnBleSearch.setText("BLEデバイス検索中");
             // 一覧からデバイスを削除
             mDeviceAdapter.clear();
 
@@ -287,6 +287,7 @@ public class BleActivity extends AppCompatActivity implements BleActivityFragmen
     @Override
     public void onBleSearchStopClicked(View v) {
         Log.d(TAG, "clickBLE検索ストップボタン");
+        //stopScan();
         blePeriodicService.stopResident(v.getContext());
     }
 
