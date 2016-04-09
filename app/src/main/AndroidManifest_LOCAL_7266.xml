@@ -23,8 +23,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.UserDetailActivity"
-            android:label="@string/title_spider">
+            android:name=".activity.SpiderActivity"
+            android:label="@string/title_spider"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity android:name=".activity.BleActivity"
             android:theme="@style/AppTheme.NoActionBar">

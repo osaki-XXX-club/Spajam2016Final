@@ -1,103 +1,94 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container_top"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="jp.co.future.androidbase.activity.MainActivity"
-    tools:ignore="MergeRootFrame" >
+    tools:ignore="MergeRootFrame">
 
-    <!-- フッター -->
 
-    <LinearLayout
-        android:id="@+id/footer"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#3b499f"
-        android:orientation="horizontal" >
-
-        <!-- ログアウトボタン -->
-
-        <Button
-            android:id="@+id/btn_Logout"
-            style="@style/FooterButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/btn_Logout" />
-        <!-- ダミー -->
-
-        <TextView
-            android:id="@+id/dummy"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:visibility="invisible" />
-
-        <!-- バージョン情報 -->
-
-        <TextView
-            android:id="@+id/txt_version"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:gravity="right|bottom"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <LinearLayout
+    <RelativeLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/body"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/footer"
         android:background="@color/mainbg"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
 
-
-        <!-- aa -->
-
-        <Button
-            android:id="@+id/btn_aa"
-            style="@style/BodyButton"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:drawableLeft="@drawable/box128"
-            android:drawablePadding="-50dp"
-            android:text="@string/btn_aa" />
-
-
-
-        <!-- 設定 -->
-
-        <Button
-            android:id="@+id/btn_settei"
-            style="@style/BodyButton"
+        <com.skyfishjy.library.RippleBackground xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:drawableLeft="@drawable/cog"
-            android:drawablePadding="-50dp"
-            android:text="@string/btn_settei" />
+            android:layout_height="match_parent"
+            app:rb_color="#0099CC"
+            app:rb_duration="3000"
+            app:rb_radius="32dp"
+            app:rb_rippleAmount="6"
+            app:rb_scale="6">
 
-        <!-- 解除 -->
-        <Button
-            android:id="@+id/btn_kaijo"
-            style="@style/BodyButton"
-            android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/centerImage"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/phone1" />
+
+
+            <!--<ImageView-->
+            <!--android:layout_width="64dp"-->
+            <!--android:layout_height="64dp"-->
+            <!--android:id="@+id/foundDevice"-->
+            <!--android:layout_above="@id/centerImage"-->
+            <!--android:layout_marginBottom="32dp"-->
+            <!--android:layout_toLeftOf="@id/centerImage"-->
+            <!--android:layout_marginRight="6dp"-->
+            <!--android:src="@drawable/phone2"-->
+            <!--android:clickable="true"-->
+            <!--android:focusable="true"-->
+            <!--android:focusableInTouchMode="true"-->
+            <!--android:visibility="invisible"/>-->
+        </com.skyfishjy.library.RippleBackground>
+
+        <com.nightonke.boommenu.BoomMenuButton
+            android:id="@+id/boom"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:drawableLeft="@drawable/list"
-            android:drawablePadding="-50dp"
-            android:text="@string/btn_kaijo" />
-    </LinearLayout>
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentTop="false"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="20dp"
+            app:boom_button_color="@color/red"
+            app:boom_button_pressed_color="@color/colorPrimary"
+            app:boom_inActionBar="false" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/foundDevice"
+            layout_alignParentTop="true"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center_vertical"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:src="@drawable/user1"
+            android:visibility="invisible"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="2dp" />
+
+    </RelativeLayout>
+
 
 </RelativeLayout>

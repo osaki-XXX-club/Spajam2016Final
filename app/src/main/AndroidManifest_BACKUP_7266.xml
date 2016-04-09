@@ -31,6 +31,7 @@
         </activity>
 
         <activity android:name=".activity.DeviceActivity" />
+<<<<<<< HEAD
         <service
             android:name="jp.co.future.androidbase.service.BlePeriodicService"
             android:launchMode="singleTask">
@@ -39,6 +40,9 @@
             android:name="jp.co.future.androidbase.service.BlePeriodicService"
             android:launchMode="singleTask">
         </service>
+=======
+
+>>>>>>> 5a3472d04b160311bf18b8a1d8185f10cc329efd
     </application>
 
 
