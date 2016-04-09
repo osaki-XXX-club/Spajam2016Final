@@ -1,10 +1,12 @@
 package jp.co.future.androidbase;
 
-import com.squareup.okhttp.OkHttpClient;
+import com.squareup.;
 
 import java.util.HashMap;
 import java.util.Map;
 
+
+import okhttp3.OkHttpClient;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 
