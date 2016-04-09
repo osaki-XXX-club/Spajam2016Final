@@ -34,6 +34,8 @@ dependencies {
     compile 'com.github.ksoichiro:android-observablescrollview:1.6.0'
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.github.vajro:MaterialDesignLibrary:1.6'
+    compile 'com.skyfishjy.ripplebackground:library:1.0.1'
+    compile 'com.nightonke:boommenu:1.0.6'
 
     // retrofit
     compile 'com.squareup.retrofit:retrofit:1.9.0'

@@ -83,11 +83,11 @@ public class UserDetailActivityFragment extends Fragment {
     public void onButtonPressed(View v) {
         if (mListener != null) {
             int id = v.getId();
-            if (id == R.id.btn_aa) {
-                mListener.onAaClicked(v);
+//            if (id == R.id.btn_aa) {
+//                mListener.onAaClicked(v);
 //            } else if (id == R.id.btn_settei) {
 //                mListener.onSetteiClicked(v);
-            }
+            //}
 
         }
     }
@@ -119,7 +119,7 @@ public class UserDetailActivityFragment extends Fragment {
     public interface OnFragmentInteractionListener {
 
         // ボタンがクリックされた時
-        public void onAaClicked(View v);
+        //public void onAaClicked(View v);
 
 
     }

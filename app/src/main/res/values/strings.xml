@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Base</string>
-    <string name="title_spider">雲の糸</string>
+    <string name="title_spider">すれ違ったユーザー</string>
     <string name="btn_ble">BLE検索</string>
     <string name="btn_aa">テスト２</string>
     <string name="btn_settei">設定</string>

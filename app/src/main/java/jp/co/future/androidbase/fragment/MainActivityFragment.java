@@ -61,13 +61,13 @@ public class MainActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         //setTextSizeByInch(rootView);
         // ボタンがクリックされた時の処理
-        rootView.findViewById(R.id.btn_aa).setOnClickListener(buttonClickListener);
+        rootView.findViewById(R.id.foundDevice).setOnClickListener(buttonClickListener);
 
         // 設定ボタンがクリックされた時の処理
-        rootView.findViewById(R.id.btn_settei).setOnClickListener(buttonClickListener);
+        //rootView.findViewById(R.id.btn_settei).setOnClickListener(buttonClickListener);
 
         // 設定ボタンがクリックされた時の処理
-        rootView.findViewById(R.id.btn_kaijo).setOnClickListener(buttonClickListener);
+        //rootView.findViewById(R.id.btn_kaijo).setOnClickListener(buttonClickListener);
 
         return rootView;
     }
@@ -84,10 +84,10 @@ public class MainActivityFragment extends Fragment {
     public void onButtonPressed(View v) {
         if (mListener != null) {
             int id = v.getId();
-            if (id == R.id.btn_aa) {
-                mListener.onAaClicked(v);
-            } else if (id == R.id.btn_settei) {
-                mListener.onSetteiClicked(v);
+            if (id == R.id.foundDevice) {
+                mListener.onFoundDeviceClicked(v);
+//            } else if (id == R.id.btn_settei) {
+//                mListener.onSetteiClicked(v);
             }
 
         }
@@ -119,13 +119,13 @@ public class MainActivityFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // ボタンがクリックされた時
-        public void onAaClicked(View v);
+        public void onFoundDeviceClicked(View v);
 
         // 一ボタンがクリックされた時
-        public void onSetteiClicked(View v);
+        //public void onSetteiClicked(View v);
 
         // 一ボタンがクリックされた時
-        public void onKaijoClicked(View v);
+        //public void onKaijoClicked(View v);
 
     }
 }

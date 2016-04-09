@@ -57,7 +57,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetailA
 
         super.onResume();
         // フッター部にバージョンの設定
-        TextView versionV = (TextView) fragment.getView().findViewById(R.id.txt_version);
+        //TextView versionV = (TextView) fragment.getView().findViewById(R.id.txt_version);
         //versionV.setText("Version_" + versionName);
 
         ObservableScrollView listView = (ObservableScrollView) fragment.getView().findViewById(R.id.list);
@@ -74,11 +74,11 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetailA
     }
 
 
-    @Override
-    public void onAaClicked(View v) {
-
-
-    }
+//    @Override
+//    public void onAaClicked(View v) {
+//
+//
+//    }
 
     @Override
     public void onScrollChanged(int scrollY, boolean firstScroll,
