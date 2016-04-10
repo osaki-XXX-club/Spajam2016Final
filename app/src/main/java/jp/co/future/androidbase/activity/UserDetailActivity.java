@@ -62,7 +62,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetailA
             // フラグメントを生成
             fragment = new UserDetailActivityFragment();
             // フラグメントをアクティビティに追加する FragmentTransaction を利用する
-            FragmentManager manager = getFragmentManager();
+            Fragmentanager manager = getFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
             transaction.add(R.id.container, fragment, "fragment");
             transaction.commit();
@@ -113,12 +113,21 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetailA
         final int age;
         final String comment;
         if ("ogawatachi".equals(id)) {
-            age = 26;
+                age = 26;
             comment = "最近興味があることはハッカソンです。アイデア、独創性、実装力、プレゼン力と社会人に必要なすべての要素を求められるため非常に刺激になります。趣味は登山で月1ペースで奥多摩に上りに行く生粋の山男です。";
 
         } else if ("laqiiz".equals(id)) {
             age = 29;
             comment = "最近ハワイで結婚式を上げました。結婚すると時間がなくなると聞きますが、本当その通りです。まだ子供もいないので、産まれたら大変だろうなと今から戦々恐々としています";
+
+        } else if ("keigodasu".equals(id)) {
+            age = 25;
+            comment = "IoTや3Dプリンタなどモノづくりが大好きです。社内で一番CADを使って様々なプロダクトを作成しています。面白いアイデアがあればぜひ一緒にブレストしましょう！";
+
+        } else if ("sadayuki-matsuno".equals(id)) {
+            age = 23;
+            comment = "社会人3年目になりました！技術が大好き過ぎて、最近表参道のギークハウス（シェアハウス）に引っ越しました！技術を極める！";
+
         } else {
             age = 23;
             comment = "社内のR＆D部隊に転籍しました。しかし技術が好きでもっと高めたいですが、採用・人材育成に関わることが多く、もっと技術領域に深く関わりたい今日このごろです";
