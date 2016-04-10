@@ -52,7 +52,9 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetailA
 
     private Handler mHandler;
 
-    /** トップ画面からの連携用データ */
+    /**
+     * トップ画面からの連携用データ
+     */
     private String id;
 
     @Override
@@ -128,6 +130,25 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetailA
             final ImageView imageView = (ImageView) fragment.getView().findViewById(R.id.imgv_user);
             Drawable drawable = getResources().getDrawable(R.drawable.mano);
             imageView.setImageDrawable(drawable);
+        } else if ("keigodasu".equals(id)) {
+            age = 25;
+            comment = "IoTや3Dプリンタなどモノづくりが大好きです。社内で一番CADを使って様々なプロダクトを作成しています。面白いアイデアがあればぜひ一緒にブレストしましょう！";
+
+            //写真
+            final ImageView imageView = (ImageView) fragment.getView().findViewById(R.id.imgv_user);
+            Drawable drawable = getResources().getDrawable(R.drawable.mano);
+            imageView.setImageDrawable(drawable);
+
+        } else if ("sadayuki-matsuno".equals(id)) {
+            age = 23;
+            comment = "社会人3年目になりました！技術が大好き過ぎて、最近表参道のギークハウス（シェアハウス）に引っ越しました！技術を極める！";
+
+            //写真
+            final ImageView imageView = (ImageView) fragment.getView().findViewById(R.id.imgv_user);
+            Drawable drawable = getResources().getDrawable(R.drawable.mano);
+            imageView.setImageDrawable(drawable);
+
+
         } else {
             age = 23;
             comment = "社内のR＆D部隊に転籍しました。しかし技術が好きでもっと高めたいですが、採用・人材育成に関わることが多く、もっと技術領域に深く関わりたい今日このごろです";
@@ -136,8 +157,6 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetailA
         mHandler = new Handler();
 
         final TextView view1 = (TextView) fragment.getView().findViewById(R.id.txt_username);
-
-
 
 
         final TextView commentView = (TextView) fragment.getView().findViewById(R.id.txt_comment);
