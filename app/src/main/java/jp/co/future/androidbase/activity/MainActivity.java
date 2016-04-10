@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         rightDp = rnd.nextInt(250) - 50;
         bottomDp = rnd.nextInt(250) - 50;
         leftDp = rnd.nextInt(500) + 50 + 400;
-        topDp = rnd.nextInt(800)+ 400;
+        topDp = rnd.nextInt(800)+ 500;
 
         Log.d(TAG, "左：" + leftDp);
         Log.d(TAG, "上：" + topDp);
@@ -333,6 +333,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         super.onDestroy();
         //TODO BLE止める
         blePeriodicService.stopResident(getApplicationContext());
+
+        Intent intent = new Intent(this, BlePeriodicService.class);
+
+        // サービスの停止
+        stopService(intent);
 
 
     }
