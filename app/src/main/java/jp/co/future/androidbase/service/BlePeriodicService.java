@@ -7,6 +7,7 @@ import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
+import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +16,7 @@ import android.os.ParcelUuid;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
 import jp.co.future.androidbase.activity.DeviceAdapter;
@@ -196,6 +198,26 @@ public class BlePeriodicService extends BasePeriodicService implements Bluetooth
     @Override
     public void onLeScan(final BluetoothDevice newDeivce, final int newRssi,
                          final byte[] newScanRecord) {
+
+        ParcelUuid[] uuids = newDeivce.getUuids();
+        String uuid = "";
+        if (uuids != null) {
+            for (ParcelUuid puuid : uuids) {
+                uuid += puuid.toString() + " ";
+            }
+        }
+        String msg = "name=" + newDeivce.getName() + ", bondStatus="
+                + newDeivce.getBondState() + ", address="
+                + newDeivce.getAddress() + ", type" + newDeivce.getType()
+                + ", uuids=" + uuid;
+        Log.d("BLEActivity", msg);
+
+
+            //ScanResult sr = new ScanResult(newDeivce.);
+            String result = new String(newScanRecord);
+            Log.d("newScanRecord", result);
+
+
 //        mDeviceAdapter.update(newDeivce, newRssi, newScanRecord);
         Log.d(TAG, "Device = " + String.valueOf(newDeivce) + "; Rssi = " + newRssi);
         // INTENTをブロードキャスト

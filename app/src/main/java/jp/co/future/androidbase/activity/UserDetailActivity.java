@@ -2,11 +2,13 @@ package jp.co.future.androidbase.activity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
@@ -115,10 +117,17 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetailA
         if ("ogawatachi".equals(id)) {
             age = 26;
             comment = "最近興味があることはハッカソンです。アイデア、独創性、実装力、プレゼン力と社会人に必要なすべての要素を求められるため非常に刺激になります。趣味は登山で月1ペースで奥多摩に上りに行く生粋の山男です。";
-
+            //写真
+            final ImageView imageView = (ImageView) fragment.getView().findViewById(R.id.imgv_user);
+            Drawable drawable = getResources().getDrawable(R.drawable.user1);
+            imageView.setImageDrawable(drawable);
         } else if ("laqiiz".equals(id)) {
             age = 29;
             comment = "最近ハワイで結婚式を上げました。結婚すると時間がなくなると聞きますが、本当その通りです。まだ子供もいないので、産まれたら大変だろうなと今から戦々恐々としています";
+            //写真
+            final ImageView imageView = (ImageView) fragment.getView().findViewById(R.id.imgv_user);
+            Drawable drawable = getResources().getDrawable(R.drawable.mano);
+            imageView.setImageDrawable(drawable);
         } else {
             age = 23;
             comment = "社内のR＆D部隊に転籍しました。しかし技術が好きでもっと高めたいですが、採用・人材育成に関わることが多く、もっと技術領域に深く関わりたい今日このごろです";
@@ -127,6 +136,9 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetailA
         mHandler = new Handler();
 
         final TextView view1 = (TextView) fragment.getView().findViewById(R.id.txt_username);
+
+
+
 
         final TextView commentView = (TextView) fragment.getView().findViewById(R.id.txt_comment);
         commentView.setText(comment);

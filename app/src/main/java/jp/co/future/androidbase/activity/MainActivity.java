@@ -136,26 +136,28 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
                 Log.d(TAG, "device =" + device);
 
                 //デバイスIDで誰のBLEか判定する
-                if ("1".equalsIgnoreCase(device)) {
+                //if ("6A:5F:CD:4A:C4:AA".equalsIgnoreCase(device)) {//検証機
+                if ("5F:0E:66:9B:34:F2".equalsIgnoreCase(device)) {//淳平さん
+
                     //小川
-                    if(!foundDevice1.isShown()){
+                    if (!foundDevice1.isShown()) {
                         foundDevice(foundDevice1);
                     }
 
 
                 } else if ("2".equalsIgnoreCase(device)) {
                     //真野
-                    if(!foundDevice2.isShown()){
+                    if (!foundDevice2.isShown()) {
                         foundDevice(foundDevice2);
                     }
                 } else if ("98:4F:EE:0F:75:1F".equalsIgnoreCase(device)) {
                     //Arudino
-                    if(!foundDevice3.isShown()){
+                    if (!foundDevice3.isShown()) {
                         foundDevice(foundDevice3);
                     }
                 } else if ("28:A1:83:31:16:B6".equalsIgnoreCase(device)) {
                     //タグ
-                    if(!foundDevice4.isShown()){
+                    if (!foundDevice4.isShown()) {
                         foundDevice(foundDevice4);
                     }
                 }
@@ -336,19 +338,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         // 画面へ遷移
         // インテントのインスタンス生成
         Intent intent = new Intent(this, UserDetailActivity.class);
-        if(v.getId()==foundDevice1.getId()){
+        if (v.getId() == foundDevice1.getId()) {
             intent.putExtra("id", "ogawatachi");
         }
-        if(v.getId()==foundDevice2.getId()){
+        if (v.getId() == foundDevice2.getId()) {
             intent.putExtra("id", "laqiiz");
         }
-        if(v.getId()==foundDevice1.getId()){
+        if (v.getId() == foundDevice3.getId()) {
             intent.putExtra("id", "laqiiz");
         }
-        if(v.getId()==foundDevice1.getId()){
+        if (v.getId() == foundDevice4.getId()) {
             intent.putExtra("id", "laqiiz");
         }
-
 
 
         //intent.putExtra("id", "laqiiz");
@@ -414,13 +415,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
             blePeriodicService.startResident(v.getContext());
 
             rippleBackground.startRippleAnimation();
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    foundDevice(foundDevice1);
-                }
-            }, 3000);
+//            final Handler handler = new Handler();
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    foundDevice(foundDevice1);
+//                }
+//            }, 3000);
 
         }
 
