@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -186,7 +187,11 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetailA
                 GithubUser body = response.body();
 
                 TextView view2 = (TextView) fragment.getView().findViewById(R.id.user_company);
-                view2.setText(String.valueOf(body.getCompany()));
+                String company = String.valueOf(body.getCompany());
+                if ("null".equals(company)) {
+                    company = "";
+                }
+                view2.setText(company);
 
                 TextView viewGitFollowers = (TextView) fragment.getView().findViewById(R.id.txt_github_followers);
                 viewGitFollowers.setText(Integer.toString(body.getFollowers()));
@@ -225,12 +230,28 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetailA
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        view1.setText(body.getName() + "(" + age + ")");
+
+                        String name = body.getName();
+                        if (TextUtils.isEmpty(name)) {
+                            name = body.getId();
+                        }
+                        if (TextUtils.isEmpty(name)) {
+                            name = body.getGithubLoginName();
+                        }
+                        if (TextUtils.isEmpty(name)) {
+                            name = "";
+                        }
+
+                        view1.setText(name + "(" + age + ")");
                         version3.setText(Integer.toString(body.getFolloweesCount()));
                         version4.setText(Integer.toString(body.getItemsCount()));
                         introduceView.setText(body.getDescription());
+
                         String location = body.getLocation();
-                        addressView.setText(location == null ? "" : location);
+                        if (TextUtils.isEmpty(location)) {
+                            location = "Japan";
+                        }
+                        addressView.setText(location);
                         qiitaLinkView.setText("http://qiita.com/" + userId);
                     }
                 });
