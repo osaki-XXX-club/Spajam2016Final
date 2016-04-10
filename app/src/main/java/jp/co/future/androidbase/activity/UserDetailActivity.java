@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
@@ -32,16 +31,21 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UserDetailActivity extends AppCompatActivity implements UserDetailActivityFragment.OnFragmentInteractionListener ,ObservableScrollViewCallbacks {
+public class UserDetailActivity extends AppCompatActivity implements UserDetailActivityFragment.OnFragmentInteractionListener, ObservableScrollViewCallbacks {
 
-
-    /** ログ出力用タグ */
+    /**
+     * ログ出力用タグ
+     */
     private static final String TAG = UserDetailActivity.class.getSimpleName();
 
-    /** クラス名 */
+    /**
+     * クラス名
+     */
     private static final String className = UserDetailActivity.class.getName().toString();
 
-    /** バインドするフラグメント */
+    /**
+     * バインドするフラグメント
+     */
     private UserDetailActivityFragment fragment;
 
     private Handler mHandler;
@@ -61,8 +65,34 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetailA
             transaction.add(R.id.container, fragment, "fragment");
             transaction.commit();
         }
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
 
+    @Override
+    public void onScrollChanged(int scrollY, boolean firstScroll,
+                                boolean dragging) {
+    }
+
+    @Override
+    public void onDownMotionEvent() {
+    }
+
+    @Override
+    public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+        ActionBar ab = getSupportActionBar();
+        if (scrollState == ScrollState.UP) {
+            if (ab.isShowing()) {
+                ab.hide();
+            }
+        } else if (scrollState == ScrollState.DOWN) {
+            if (!ab.isShowing()) {
+                ab.show();
+            }
+        }
     }
 
     @Override
@@ -73,9 +103,26 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetailA
         //TextView versionV = (TextView) fragment.getView().findViewById(R.id.txt_version);
         //versionV.setText("Version_" + versionName);
 
-
         final String userId = "laqiiz";
-        final UserDetailActivity activity = this;
+        final int age = 26;
+        final String comment = "最近興味があることはハッカソンです。アイデア、独創性、実装力、プレゼン力と社会人に必要なすべての要素を求められるため非常に刺激になります。趣味は登山で月1ペースで奥多摩に上りに行く生粋の山男です。";
+
+        mHandler = new Handler();
+
+        final TextView view1 = (TextView) fragment.getView().findViewById(R.id.txt_username);
+
+        final TextView commentView = (TextView) fragment.getView().findViewById(R.id.txt_comment);
+        commentView.setText(comment);
+
+        // Qiita関連
+        final TextView version3 = (TextView) fragment.getView().findViewById(R.id.txt_qiita_followees);
+        final TextView version4 = (TextView) fragment.getView().findViewById(R.id.txt_qiita_item_count);
+        final TextView introduceView = (TextView) fragment.getView().findViewById(R.id.txt_intoroduce);
+        final TextView addressView = (TextView) fragment.getView().findViewById(R.id.txt_user_address);
+
+        // リンク
+        final TextView qiitaLinkView = (TextView) fragment.getView().findViewById(R.id.txt_link_qiita);
+        final TextView githubLinkView = (TextView) fragment.getView().findViewById(R.id.txt_link_github);
 
         // Github情報の表示
         GitHubClient gitHubClient = ServiceGenerator.createService(GitHubClient.class);
@@ -85,8 +132,17 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetailA
             @Override
             public void onResponse(Call<GithubUser> call, Response<GithubUser> response) {
                 GithubUser body = response.body();
-                TextView version2 = (TextView) fragment.getView().findViewById(R.id.txt_intoroduce);
-                version2.setText("Version_" + body.getName() + "," + body.getCompany());
+
+                TextView view2 = (TextView) fragment.getView().findViewById(R.id.user_company);
+                view2.setText(String.valueOf(body.getCompany()));
+
+                TextView viewGitFollowers = (TextView) fragment.getView().findViewById(R.id.txt_github_followers);
+                viewGitFollowers.setText(Integer.toString(body.getFollowers()));
+
+                TextView viewGitRepos = (TextView) fragment.getView().findViewById(R.id.txt_github_repos);
+                viewGitRepos.setText(Integer.toString(body.getPublicRepos()));
+
+                githubLinkView.setText(body.getHtmlUrl());
             }
 
             @Override
@@ -94,24 +150,6 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetailA
                 t.printStackTrace();
             }
         });
-
-
-// JSONパースエラーになるので、生でOKHttpClientを使う
-//        QiitaClient qiitaClient = ServiceGenerator.createService(QiitaClient.class);
-//        Call<QiitaUser> qiitaCall = qiitaClient.user(userId);
-//        qiitaCall.enqueue(new Callback<QiitaUser>() {
-//            @Override
-//            public void onResponse(Call<QiitaUser> call, Response<QiitaUser> response) {
-//                QiitaUser body = response.body();
-//                TextView version3 = (TextView) fragment.getView().findViewById(R.id.txt_intoroduce3);
-//                version3.setText("Version_" + body.getName() + "," + body.getDescription());
-//            }
-//
-//            @Override
-//            public void onFailure(Call<QiitaUser> call, Throwable t) {
-//                t.printStackTrace();
-//            }
-//        });
 
 
         Request request = new Request.Builder()
@@ -131,13 +169,16 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetailA
 
                 Gson gson = new Gson();
                 final QiitaUser body = gson.fromJson(res, QiitaUser.class);
-                mHandler = new Handler(Looper.getMainLooper());
 
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        TextView version3 = (TextView) fragment.getView().findViewById(R.id.txt_intoroduce3);
-                        version3.setText("Version_" + body.getName() + "," + body.getDescription());
+                        view1.setText(body.getName() + "(" + age + ")");
+                        version3.setText(Integer.toString(body.getFolloweesCount()));
+                        version4.setText(Integer.toString(body.getItemsCount()));
+                        introduceView.setText(body.getDescription());
+                        addressView.setText(body.getLocation());
+                        qiitaLinkView.setText("http://qiita.com/" + userId);
                     }
                 });
             }
@@ -165,73 +206,23 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetailA
                         .select(".userActivityChart_statCount")
                         .html().split("\n");
 
-                Log.d(TAG, res);
-
                 final String contribution = items[0];
 
                 mHandler = new Handler(Looper.getMainLooper());
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        TextView version3 = (TextView) fragment.getView().findViewById(R.id.txt_intoroduce3);
-                        version3.setText("contribution=" + contribution);
+                        TextView version3 = (TextView) fragment.getView().findViewById(R.id.txt_qiita_contribution);
+                        version3.setText(contribution);
                     }
                 });
             }
         });
 
-//        AsyncTask<Void, Void, String> asyncTask = new AsyncScrapingTask().execute();
-//        String contribution = null;
-//        try {
-//            contribution = asyncTask.get();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
-
         ObservableScrollView listView = (ObservableScrollView) fragment.getView().findViewById(R.id.list);
         listView.setScrollViewCallbacks(this);
 
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-
-//    @Override
-//    public void onAaClicked(View v) {
-//
-//
-//    }
-
-    @Override
-    public void onScrollChanged(int scrollY, boolean firstScroll,
-                                boolean dragging) {
-    }
-
-    @Override
-    public void onDownMotionEvent() {
-    }
-
-    @Override
-    public void onUpOrCancelMotionEvent(ScrollState scrollState) {
-        ActionBar ab = getSupportActionBar();
-        if (scrollState == ScrollState.UP) {
-            if (ab.isShowing()) {
-                ab.hide();
-            }
-        } else if (scrollState == ScrollState.DOWN) {
-            if (!ab.isShowing()) {
-                ab.show();
-            }
-        }
-    }
-
-
-
 
 
 }

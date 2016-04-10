@@ -98,7 +98,7 @@
                             android:textStyle="bold"/>
 
                         <TextView
-                            android:id="@+id/txt_userage"
+                            android:id="@+id/txt_user_address"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -136,9 +136,9 @@
 
                 <!-- ラベル -->
 
-                <!-- 職種タイプ -->
+                <!-- 自己紹介 -->
                 <TextView
-                    android:id="@+id/label_introfuce"
+                    android:id="@+id/label_comment"
                     style="@style/ListViewHeader"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
@@ -148,9 +148,31 @@
                     android:text="自己紹介" />
 
                 <TextView
+                    android:id="@+id/txt_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_weight="4"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:text="未記入" />
+
+                <!-- 職種タイプ -->
+                <TextView
+                    android:id="@+id/label_introfuce"
+                    style="@style/ListViewHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="2dp"
+                    android:paddingTop="2dp"
+                    android:paddingLeft="5dp"
+                    android:text="スキル・実績" />
+
+                <TextView
                     android:id="@+id/txt_intoroduce"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="40dp"
                     android:layout_weight="4"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
@@ -169,7 +191,7 @@
                     android:text="Qiitaコントリビューション" />
 
                 <TextView
-                    android:id="@+id/txt_contribution"
+                    android:id="@+id/txt_qiita_contribution"
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
                     android:layout_weight="4"
@@ -182,7 +204,7 @@
 
                 <!-- 記事数 -->
                 <TextView
-                    android:id="@+id/txt_label3"
+                    android:id="@+id/label_qiita_item_count"
                     style="@style/ListViewHeader"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
@@ -192,7 +214,7 @@
                     android:text="Qiita記事数" />
 
                 <TextView
-                    android:id="@+id/txt_intoroduce3"
+                    android:id="@+id/txt_qiita_item_count"
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
                     android:layout_weight="4"
@@ -204,7 +226,7 @@
 
                 <!-- フォロワー数 -->
                 <TextView
-                    android:id="@+id/txt_label4"
+                    android:id="@+id/label_qiita_followees"
                     style="@style/ListViewHeader"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
@@ -214,7 +236,7 @@
                     android:text="Qiitaフォロワー数" />
 
                 <TextView
-                    android:id="@+id/txt_intoroduce4"
+                    android:id="@+id/txt_qiita_followees"
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
                     android:layout_weight="4"
@@ -225,7 +247,7 @@
                     android:text="" />
 
                 <TextView
-                    android:id="@+id/txt_label5"
+                    android:id="@+id/label_github_repos"
                     style="@style/ListViewHeader"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
@@ -235,7 +257,7 @@
                     android:text="GitHubリポジトリ数" />
 
                 <TextView
-                    android:id="@+id/txt_intoroduce5"
+                    android:id="@+id/txt_github_repos"
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
                     android:layout_weight="4"
@@ -247,7 +269,7 @@
 
 
                 <TextView
-                    android:id="@+id/txt_label6"
+                    android:id="@+id/label_github_followers"
                     style="@style/ListViewHeader"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
@@ -257,7 +279,7 @@
                     android:text="Githubフォロワー数" />
 
                 <TextView
-                    android:id="@+id/txt_intoroduce6"
+                    android:id="@+id/txt_github_followers"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_weight="4"
@@ -266,6 +288,41 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/black"
                     android:text="" />
+
+
+                <TextView
+                    android:id="@+id/label_link"
+                    style="@style/ListViewHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="2dp"
+                    android:paddingTop="2dp"
+                    android:paddingLeft="5dp"
+                    android:text="link" />
+
+                <TextView
+                    android:id="@+id/txt_link_qiita"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_weight="4"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:text=""
+                    android:autoLink="web"/>
+
+                <TextView
+                    android:id="@+id/txt_link_github"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_weight="4"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:text=""
+                    android:autoLink="web"/>
 
             </LinearLayout>
 
