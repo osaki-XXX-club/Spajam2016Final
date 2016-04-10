@@ -20,7 +20,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -40,7 +39,7 @@ import jp.co.future.androidbase.fragment.MainActivityFragment;
 import jp.co.future.androidbase.service.BlePeriodicService;
 import jp.co.future.androidbase.util.BleUtil;
 
-public class MainActivity extends AppCompatActivity implements MainActivityFragment.OnFragmentInteractionListener{
+public class MainActivity extends AppCompatActivity implements MainActivityFragment.OnFragmentInteractionListener {
 
 
     /**
@@ -76,10 +75,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
     private static String device;
     private static int rssi;
 
-    /** ブロードキャストレシーバ */
+    /**
+     * ブロードキャストレシーバ
+     */
     private BroadcastReceiver bleReceiver;
 
-    /** フィルター対象のIntent */
+    /**
+     * フィルター対象のIntent
+     */
     private static final String BLE_CALLBACK_INTENT = "jp.co.future.service.BlePeriodicService";
 
 
@@ -88,7 +91,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
      */
     private MainActivityFragment fragment;
 
-    private ImageView foundDevice;
+    private ImageView foundDevice1;
+    private ImageView foundDevice2;
+    private ImageView foundDevice3;
+    private ImageView foundDevice4;
 
     private BoomMenuButton boomMenuButton;
 
@@ -126,8 +132,33 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
             public void onReceive(Context context, Intent intent) {
                 // 前画面からパラメータを取得する
                 device = intent.getStringExtra("device");
-                rssi = intent.getIntExtra("rssi",0);
+                rssi = intent.getIntExtra("rssi", 0);
                 Log.d(TAG, "device =" + device);
+
+                //デバイスIDで誰のBLEか判定する
+                if ("1".equalsIgnoreCase(device)) {
+                    //小川
+                    if(!foundDevice1.isShown()){
+                        foundDevice(foundDevice1);
+                    }
+
+
+                } else if ("2".equalsIgnoreCase(device)) {
+                    //真野
+                    if(!foundDevice2.isShown()){
+                        foundDevice(foundDevice2);
+                    }
+                } else if ("98:4F:EE:0F:75:1F".equalsIgnoreCase(device)) {
+                    //Arudino
+                    if(!foundDevice3.isShown()){
+                        foundDevice(foundDevice3);
+                    }
+                } else if ("28:A1:83:31:16:B6".equalsIgnoreCase(device)) {
+                    //タグ
+                    if(!foundDevice4.isShown()){
+                        foundDevice(foundDevice4);
+                    }
+                }
             }
         };
 
@@ -156,7 +187,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
                     if (blesearch) {
                         rippleBackground.stopRippleAnimation();
                         blesearch = false;
-                        foundDevice.setVisibility(View.INVISIBLE);
+
+                        foundDevice1.setVisibility(View.INVISIBLE);
+                        foundDevice2.setVisibility(View.INVISIBLE);
+                        foundDevice3.setVisibility(View.INVISIBLE);
+                        foundDevice4.setVisibility(View.INVISIBLE);
+
 
                         //TODO BLE止める
                         blePeriodicService.stopResident(getApplicationContext());
@@ -182,16 +218,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         rippleBackground = (RippleBackground) findViewById(R.id.content);
 
 
-
-        foundDevice = (ImageView) findViewById(R.id.foundDevice);
-
+        foundDevice1 = (ImageView) findViewById(R.id.foundDevice1);
+        foundDevice2 = (ImageView) findViewById(R.id.foundDevice2);
+        foundDevice3 = (ImageView) findViewById(R.id.foundDevice3);
+        foundDevice4 = (ImageView) findViewById(R.id.foundDevice4);
 
 
     }
 
-    private void foundDevice() {
+    private void foundDevice(ImageView foundDevice) {
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.setDuration(400);
+        animatorSet.setDuration(800);
         animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
         ArrayList<Animator> animatorList = new ArrayList<Animator>();
         ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(foundDevice, "ScaleX", 0f, 1.2f, 1f);
@@ -287,6 +324,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //TODO BLE止める
+        blePeriodicService.stopResident(getApplicationContext());
 
 
     }
@@ -297,7 +336,22 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         // 画面へ遷移
         // インテントのインスタンス生成
         Intent intent = new Intent(this, UserDetailActivity.class);
-        intent.putExtra("id", "ogawatachi");
+        if(v.getId()==foundDevice1.getId()){
+            intent.putExtra("id", "ogawatachi");
+        }
+        if(v.getId()==foundDevice2.getId()){
+            intent.putExtra("id", "laqiiz");
+        }
+        if(v.getId()==foundDevice1.getId()){
+            intent.putExtra("id", "laqiiz");
+        }
+        if(v.getId()==foundDevice1.getId()){
+            intent.putExtra("id", "laqiiz");
+        }
+
+
+
+        //intent.putExtra("id", "laqiiz");
 //        intent.putExtra("subMode", CommonKbnConst.VAL_MODE_HAITATU);
 //        intent.putExtra("clear", true);
         // 次画面のアクティビティ起動
@@ -318,6 +372,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
             return;
         }
 
+        //TODO BLE止める
+        blePeriodicService.stopResident(getApplicationContext());
+
         // BT check
         BluetoothManager bluetoothManager = BleUtil.getManager(this);
         if (bluetoothManager != null) {
@@ -333,10 +390,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         }
 
 
-
     }
-
-
 
 
     @Override
@@ -344,7 +398,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         if (blesearch) {
             rippleBackground.stopRippleAnimation();
             blesearch = false;
-            foundDevice.setVisibility(View.INVISIBLE);
+            foundDevice1.setVisibility(View.INVISIBLE);
+            foundDevice2.setVisibility(View.INVISIBLE);
+            foundDevice3.setVisibility(View.INVISIBLE);
+            foundDevice4.setVisibility(View.INVISIBLE);
 
             //TODO BLE止める
             blePeriodicService.stopResident(v.getContext());
@@ -361,15 +418,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    foundDevice();
+                    foundDevice(foundDevice1);
                 }
             }, 3000);
 
         }
 
     }
-
-
 
 
     //    @Override

@@ -73,8 +73,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- 小川-->
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/foundDevice"
+            android:id="@+id/foundDevice1"
             layout_alignParentTop="true"
             android:layout_width="64dp"
             android:layout_height="64dp"
@@ -85,7 +86,55 @@
             android:focusableInTouchMode="true"
             android:src="@drawable/user1"
             android:visibility="invisible"
-            app:civ_border_color="#FF000000"
+            app:civ_border_color="@color/DeepSkyBlue"
+            app:civ_border_width="2dp" />
+
+        <!-- 真野-->
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/foundDevice2"
+            layout_alignParentTop="true"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center_vertical"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:src="@drawable/mano"
+            android:visibility="invisible"
+            app:civ_border_color="@color/DeepSkyBlue"
+            app:civ_border_width="2dp" />
+
+        <!-- Arduino-->
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/foundDevice3"
+            layout_alignParentTop="true"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center_vertical"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:src="@drawable/mano"
+            android:visibility="invisible"
+            app:civ_border_color="@color/DeepSkyBlue"
+            app:civ_border_width="2dp" />
+
+        <!-- タグ-->
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/foundDevice4"
+            layout_alignParentTop="true"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center_vertical"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:src="@drawable/box128"
+            android:visibility="invisible"
+            app:civ_border_color="@color/DeepSkyBlue"
             app:civ_border_width="2dp" />
 
     </RelativeLayout>

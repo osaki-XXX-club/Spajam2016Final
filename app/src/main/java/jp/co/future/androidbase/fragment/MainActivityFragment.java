@@ -32,10 +32,8 @@ public class MainActivityFragment extends Fragment {
     /**
      * Use this factory method to create a new instance of this fragment using the provided parameters.
      *
-     * @param param1
-     *            Parameter 1.
-     * @param param2
-     *            Parameter 2.
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
      * @return A new instance of fragment TopMenuFragment.
      */
     public static MainActivityFragment newInstance(String param1, String param2) {
@@ -61,7 +59,10 @@ public class MainActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         //setTextSizeByInch(rootView);
         // ボタンがクリックされた時の処理
-        rootView.findViewById(R.id.foundDevice).setOnClickListener(buttonClickListener);
+        rootView.findViewById(R.id.foundDevice1).setOnClickListener(buttonClickListener);
+        rootView.findViewById(R.id.foundDevice2).setOnClickListener(buttonClickListener);
+        rootView.findViewById(R.id.foundDevice3).setOnClickListener(buttonClickListener);
+        rootView.findViewById(R.id.foundDevice4).setOnClickListener(buttonClickListener);
 
         // 設定ボタンがクリックされた時の処理
         rootView.findViewById(R.id.centerImage).setOnClickListener(buttonClickListener);
@@ -84,7 +85,7 @@ public class MainActivityFragment extends Fragment {
     public void onButtonPressed(View v) {
         if (mListener != null) {
             int id = v.getId();
-            if (id == R.id.foundDevice) {
+            if (id == R.id.foundDevice1 || id == R.id.foundDevice2 || id == R.id.foundDevice3 || id == R.id.foundDevice4) {
                 mListener.onFoundDeviceClicked(v);
             } else if (id == R.id.centerImage) {
                 mListener.onCenterImageClicked(v);
@@ -112,7 +113,7 @@ public class MainActivityFragment extends Fragment {
     /**
      * This interface must be implemented by activities that contain this fragment to allow an interaction in this
      * fragment to be communicated to the activity and potentially other fragments contained in that activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html" >Communicating with Other
      * Fragments</a> for more information.

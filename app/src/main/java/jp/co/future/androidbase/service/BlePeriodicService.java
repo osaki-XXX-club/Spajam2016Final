@@ -1,23 +1,5 @@
 package jp.co.future.androidbase.service;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -28,21 +10,14 @@ import android.bluetooth.le.BluetoothLeAdvertiser;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Debug;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.ParcelUuid;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 
-import jp.co.future.androidbase.R;
-import jp.co.future.androidbase.activity.BleActivity;
+import java.util.UUID;
+
 import jp.co.future.androidbase.activity.DeviceAdapter;
-import jp.co.future.androidbase.activity.MainActivity;
-import jp.co.future.androidbase.fragment.BleActivityFragment;
 import jp.co.future.androidbase.util.BleUtil;
 
 /**
@@ -50,7 +25,7 @@ import jp.co.future.androidbase.util.BleUtil;
  */
 public class BlePeriodicService extends BasePeriodicService implements BluetoothAdapter.LeScanCallback{
     /* ログ出力用のタグ */
-    private final String TAG = MainActivity.class.getSimpleName();
+    private final String TAG = BlePeriodicService.class.getSimpleName();
 
     /* BLE接続のアダプター */
     private BluetoothAdapter mBluetoothAdapter;
