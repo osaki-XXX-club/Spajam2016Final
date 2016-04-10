@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 
                 //デバイスIDで誰のBLEか判定する
                 //if ("6A:5F:CD:4A:C4:AA".equalsIgnoreCase(device)) {//検証機
-                if ("5F:0E:66:9B:34:F2".equalsIgnoreCase(device)) {//淳平さん
+                if ("5F:0E:66:9B:34:F2".equalsIgnoreCase(device) || "6A:5F:CD:4A:C4:AA".equalsIgnoreCase(device)) {//淳平さん
 
                     //小川
                     if (!foundDevice1.isShown()) {
@@ -202,6 +202,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
                         rippleBackground.startRippleAnimation();
                         blesearch = true;
 
+                        foundDevice1.setVisibility(View.INVISIBLE);
+                        foundDevice2.setVisibility(View.INVISIBLE);
+                        foundDevice3.setVisibility(View.INVISIBLE);
+                        foundDevice4.setVisibility(View.INVISIBLE);
+
                         //TODO BLEスタート
                         blePeriodicService.startResident(getApplicationContext());
                     }
@@ -250,8 +255,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 
         rightDp = rnd.nextInt(250) - 50;
         bottomDp = rnd.nextInt(250) - 50;
-        leftDp = rnd.nextInt(500) + 50;
-        topDp = rnd.nextInt(800);
+        leftDp = rnd.nextInt(500) + 50 + 400;
+        topDp = rnd.nextInt(800)+ 400;
 
         Log.d(TAG, "左：" + leftDp);
         Log.d(TAG, "上：" + topDp);
@@ -345,10 +350,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
             intent.putExtra("id", "laqiiz");
         }
         if (v.getId() == foundDevice3.getId()) {
-            intent.putExtra("id", "laqiiz");
+            intent.putExtra("id", "keigodasu");
         }
         if (v.getId() == foundDevice4.getId()) {
-            intent.putExtra("id", "laqiiz");
+            intent.putExtra("id", "sadayuki-matsuno");
         }
 
 
@@ -410,6 +415,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         } else {
 
             blesearch = true;
+
+            foundDevice1.setVisibility(View.INVISIBLE);
+            foundDevice2.setVisibility(View.INVISIBLE);
+            foundDevice3.setVisibility(View.INVISIBLE);
+            foundDevice4.setVisibility(View.INVISIBLE);
 
             //TODO BLEスタート
             blePeriodicService.startResident(v.getContext());

@@ -136,7 +136,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetailA
 
             //写真
             final ImageView imageView = (ImageView) fragment.getView().findViewById(R.id.imgv_user);
-            Drawable drawable = getResources().getDrawable(R.drawable.mano);
+            Drawable drawable = getResources().getDrawable(R.drawable.user4);
             imageView.setImageDrawable(drawable);
 
         } else if ("sadayuki-matsuno".equals(id)) {
@@ -145,13 +145,17 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetailA
 
             //写真
             final ImageView imageView = (ImageView) fragment.getView().findViewById(R.id.imgv_user);
-            Drawable drawable = getResources().getDrawable(R.drawable.mano);
+            Drawable drawable = getResources().getDrawable(R.drawable.user5);
             imageView.setImageDrawable(drawable);
 
 
         } else {
             age = 23;
             comment = "社内のR＆D部隊に転籍しました。しかし技術が好きでもっと高めたいですが、採用・人材育成に関わることが多く、もっと技術領域に深く関わりたい今日このごろです";
+            //写真
+            final ImageView imageView = (ImageView) fragment.getView().findViewById(R.id.imgv_user);
+            Drawable drawable = getResources().getDrawable(R.drawable.user3);
+            imageView.setImageDrawable(drawable);
         }
 
         mHandler = new Handler();

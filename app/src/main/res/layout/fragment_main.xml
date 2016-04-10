@@ -116,7 +116,7 @@
             android:clickable="true"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:src="@drawable/list"
+            android:src="@drawable/user4"
             android:visibility="invisible"
             app:civ_border_color="@color/DeepSkyBlue"
             app:civ_border_width="2dp" />
@@ -132,7 +132,7 @@
             android:clickable="true"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:src="@drawable/box128"
+            android:src="@drawable/user5"
             android:visibility="invisible"
             app:civ_border_color="@color/DeepSkyBlue"
             app:civ_border_width="2dp" />
