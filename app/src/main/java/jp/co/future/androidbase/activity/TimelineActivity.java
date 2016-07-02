@@ -1,5 +1,6 @@
 package jp.co.future.androidbase.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -106,6 +107,11 @@ public class TimelineActivity extends AppCompatActivity {
                 model.setAge(100);
                 mDataList.add(model);
                 mTimeLineAdapter.notifyDataSetChanged();
+
+                // 音声変換呼び出し
+                Intent intent = new Intent(getApplicationContext(), TtlActivity.class);
+                intent.putExtra("word", "a");
+                startActivity(intent);
             }
 
             @Override
