@@ -38,6 +38,10 @@
             android:name=".activity.BleActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".activity.TimelineActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <activity android:name=".activity.DeviceActivity" />
         <service
