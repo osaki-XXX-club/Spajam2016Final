@@ -25,6 +25,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.Types.BoomType;
 import com.nightonke.boommenu.Types.ButtonType;
@@ -33,6 +38,7 @@ import com.nightonke.boommenu.Util;
 import com.skyfishjy.library.RippleBackground;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
 
 import jp.co.future.androidbase.R;
@@ -103,6 +109,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 
     private RippleBackground rippleBackground;
 
+    //firebase
+    private DatabaseReference messageRef;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -165,7 +175,29 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
             }
         };
 
+        // firebaseのセットアップ
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        messageRef =  database.getReference("message");
 
+        // firebaseにデータを登録（サンプル）
+        messageRef.setValue("テストメッセージ");
+
+        // Read from the database
+        messageRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                String value = (String) dataSnapshot.getValue();
+                Log.d("Firebase", "Value is: " + value);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("Firebase", "Failed to read value.", error.toException());
+            }
+        });
     }
 
     @Override
