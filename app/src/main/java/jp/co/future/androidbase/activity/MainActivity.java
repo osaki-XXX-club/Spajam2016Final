@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -41,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
+import jp.co.future.androidbase.Orientation;
 import jp.co.future.androidbase.R;
 import jp.co.future.androidbase.fragment.MainActivityFragment;
 import jp.co.future.androidbase.service.BlePeriodicService;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
      * ログ出力用タグ
      */
     private static final String TAG = MainActivity.class.getSimpleName();
+    public final static String TAG_ORIENTATION = "orientation";
 
     /**
      * クラス名
@@ -251,7 +254,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
                     long[] pattern = {3000, 1000, 2000, 5000, 3000, 1000}; // OFF/ON/OFF/ON...
                     vibrator.vibrate(pattern, -1);
                 } else if (2 == buttonIndex) {
-                    //設定画面遷移
+                    //タイムライン画面遷移
+                    Intent intent = new Intent(getApplicationContext(), TimelineActivity.class);
+                    intent.putExtra(TAG_ORIENTATION, Orientation.vertical);
+                    startActivity(intent);
                 }
             }
         });
