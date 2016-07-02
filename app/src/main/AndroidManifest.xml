@@ -40,11 +40,15 @@
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <activity android:name=".activity.DeviceActivity" />
+        <activity
+            android:name=".activity.TtlActivity"
+            android:label="@string/title_activity_ttl">
+        </activity>
         <service
             android:name="jp.co.future.androidbase.service.BlePeriodicService"
             android:launchMode="singleTask">
         </service>
-       
+
     </application>
 
 
