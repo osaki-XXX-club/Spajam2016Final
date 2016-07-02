@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -26,11 +25,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.Types.BoomType;
 import com.nightonke.boommenu.Types.ButtonType;
@@ -39,7 +35,6 @@ import com.nightonke.boommenu.Util;
 import com.skyfishjy.library.RippleBackground;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Random;
 
 import jp.co.future.androidbase.Orientation;
@@ -180,27 +175,31 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 
         // firebaseのセットアップ
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        messageRef =  database.getReference("message");
-
-        // firebaseにデータを登録（サンプル）
-        messageRef.setValue("テストメッセージ");
+        messageRef = database.getReference("message");
 
         // Read from the database
-        messageRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                String value = (String) dataSnapshot.getValue();
-                Log.d("Firebase", "Value is: " + value);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("Firebase", "Failed to read value.", error.toException());
-            }
-        });
+//        messageRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                // This method is called once with the initial value and again
+//                // whenever data at this location is updated.
+//                String value = (String) dataSnapshot.getValue();
+//                Log.d("Firebase", "Value is: " + value);
+//
+////                TimeLineModel model = new TimeLineModel();
+////                model.setName(value);
+////                model.setAge(100);
+////                TimelineActivity.getmDataList().add(model);
+////                TimelineActivity.getmTimeLineAdapter().notifyDataSetChanged();
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError error) {
+//                // Failed to read value
+//                Log.w("Firebase", "Failed to read value.", error.toException());
+//            }
+//        });
     }
 
     @Override
@@ -254,6 +253,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
                     long[] pattern = {3000, 1000, 2000, 5000, 3000, 1000}; // OFF/ON/OFF/ON...
                     vibrator.vibrate(pattern, -1);
                 } else if (2 == buttonIndex) {
+                    // firebaseにデータを登録（サンプル）
+                    messageRef.setValue("テストメッセージ");
                     //タイムライン画面遷移
                     Intent intent = new Intent(getApplicationContext(), TimelineActivity.class);
                     intent.putExtra(TAG_ORIENTATION, Orientation.vertical);
@@ -298,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         rightDp = rnd.nextInt(250) - 50;
         bottomDp = rnd.nextInt(250) - 50;
         leftDp = rnd.nextInt(500) + 50 + 400;
-        topDp = rnd.nextInt(800)+ 500;
+        topDp = rnd.nextInt(800) + 500;
 
         Log.d(TAG, "左：" + leftDp);
         Log.d(TAG, "上：" + topDp);

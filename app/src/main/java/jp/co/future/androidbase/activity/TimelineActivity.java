@@ -1,11 +1,19 @@
 package jp.co.future.androidbase.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +25,17 @@ import jp.co.future.androidbase.model.TimeLineModel;
 
 public class TimelineActivity extends AppCompatActivity {
 
+    /**
+     * ログ出力用タグ
+     */
+    private static final String TAG = TimelineActivity.class.getSimpleName();
+
 
     private RecyclerView mRecyclerView;
 
-    private TimeLineAdapter mTimeLineAdapter;
+    private static TimeLineAdapter mTimeLineAdapter;
 
-    private List<TimeLineModel> mDataList = new ArrayList<>();
+    private static List<TimeLineModel> mDataList = new ArrayList<>();
 
     private Orientation mOrientation;
 
@@ -37,7 +50,7 @@ public class TimelineActivity extends AppCompatActivity {
 
         mOrientation = (Orientation) getIntent().getSerializableExtra(MainActivity.TAG_ORIENTATION);
 
-        if(mOrientation == Orientation.horizontal) {
+        if (mOrientation == Orientation.horizontal) {
             setTitle("Horizontal TimeLine");
         } else {
             setTitle("Vertical TimeLine");
@@ -67,15 +80,47 @@ public class TimelineActivity extends AppCompatActivity {
 
     private void initView() {
 
-        for(int i = 0;i <20;i++) {
-            TimeLineModel model = new TimeLineModel();
-            model.setName("Random"+i);
-            model.setAge(i);
-            mDataList.add(model);
-        }
+//        for (int i = 0; i < 20; i++) {
+//            TimeLineModel model = new TimeLineModel();
+//            model.setName("Random" + i);
+//            model.setAge(i);
+//            mDataList.add(model);
+//        }
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("message");
+
 
         mTimeLineAdapter = new TimeLineAdapter(mDataList, mOrientation);
         mRecyclerView.setAdapter(mTimeLineAdapter);
+
+        // Read from the database
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                String value = dataSnapshot.getValue(String.class);
+                Log.d(TAG, "Value is: " + value);
+                TimeLineModel model = new TimeLineModel();
+                model.setName(value);
+                model.setAge(100);
+                mDataList.add(model);
+                mTimeLineAdapter.notifyDataSetChanged();
+
+                // 音声変換呼び出し
+                Intent intent = new Intent(getApplicationContext(), TtlActivity.class);
+                intent.putExtra("word", "a");
+                startActivity(intent);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+
     }
 
     @Override
@@ -95,7 +140,7 @@ public class TimelineActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
 
-        if(mOrientation!=null)
+        if (mOrientation != null)
             savedInstanceState.putSerializable(MainActivity.TAG_ORIENTATION, mOrientation);
 
         super.onSaveInstanceState(savedInstanceState);
@@ -112,5 +157,14 @@ public class TimelineActivity extends AppCompatActivity {
 
         super.onRestoreInstanceState(savedInstanceState);
     }
+
+    public static TimeLineAdapter getmTimeLineAdapter() {
+        return mTimeLineAdapter;
+    }
+
+    public static List<TimeLineModel> getmDataList() {
+        return mDataList;
+    }
+
 }
 
