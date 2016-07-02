@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <!-- SNS通信用 -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,14 +16,14 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="SPAJAM2016 FINAL"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat">
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.InitialActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,29 +31,31 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.MainActivity"
+            android:label="@string/title_spider"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".activity.UserDetailActivity"
             android:label="@string/title_spider"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.BleActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.TimelineActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.DeviceActivity" />
         <activity
             android:name=".activity.TtlActivity"
-            android:label="@string/title_activity_ttl">
-        </activity>
+            android:label="@string/title_activity_ttl"></activity>
+
         <service
-            android:name="jp.co.future.androidbase.service.BlePeriodicService"
-            android:launchMode="singleTask">
-        </service>
+            android:name=".service.BlePeriodicService"
+            android:launchMode="singleTask"></service>
 
     </application>
-
 
 </manifest>

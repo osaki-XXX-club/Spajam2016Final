@@ -56,6 +56,8 @@ dependencies {
 
     //firebase
     compile 'com.google.firebase:firebase-database:9.2.0'
+
+    compile 'com.github.ksoichiro:android-observablescrollview:1.5.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

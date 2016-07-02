@@ -38,6 +38,7 @@
         <item>2</item>
     </string-array>
     <string name="title_activity_ttl">TtlActivity</string>
+    <string name="title_activity_main2">Main2Activity</string>
 
 
 </resources>
