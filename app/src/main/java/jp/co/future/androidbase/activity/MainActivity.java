@@ -15,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -214,6 +215,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 
                 } else if (1 == buttonIndex) {
                     //マッチング画面遷移
+                    Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+                    long[] pattern = {3000, 1000, 2000, 5000, 3000, 1000}; // OFF/ON/OFF/ON...
+                    vibrator.vibrate(pattern, -1);
                 } else if (2 == buttonIndex) {
                     //設定画面遷移
                 }
