@@ -44,7 +44,7 @@
             android:name="jp.co.future.androidbase.service.BlePeriodicService"
             android:launchMode="singleTask">
         </service>
-
+    
     </application>
 
 
