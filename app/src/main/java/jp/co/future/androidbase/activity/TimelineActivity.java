@@ -240,6 +240,7 @@ public class TimelineActivity extends AppCompatActivity implements View.OnClickL
         model.setAge(100);
         mDataList.add(model);
         mTimeLineAdapter.notifyDataSetChanged();
+        mRecyclerView.scrollToPosition(mDataList.size()-1);
 
         // TODO 音量調整
 
