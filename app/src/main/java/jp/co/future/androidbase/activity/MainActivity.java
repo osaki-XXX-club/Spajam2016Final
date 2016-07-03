@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
      * ログ出力用タグ
      */
     private static final String TAG = MainActivity.class.getSimpleName();
-    public final static String TAG_ORIENTATION = "orientation";
+
 
     /**
      * クラス名
@@ -101,11 +101,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
     private ImageView foundDevice3;
     private ImageView foundDevice4;
 
-    private BoomMenuButton boomMenuButton;
 
     private boolean blesearch;
 
     private RippleBackground rippleBackground;
+
 
     //firebase
     private DatabaseReference messageRef;
@@ -210,60 +210,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         // レシーバの登録
         registerReceiver(bleReceiver, new IntentFilter(BLE_CALLBACK_INTENT));
 
-
-        //メニューボタン
-        boomMenuButton = (BoomMenuButton) findViewById(R.id.boom);
-
-        //各メニューが押された時の処理
-        boomMenuButton.setOnSubButtonClickListener(new BoomMenuButton.OnSubButtonClickListener() {
-            @Override
-            public void onClick(int buttonIndex) {
-                // return the index of the sub button clicked
-                if (0 == buttonIndex) {
-                    //BLE切り替え
-                    if (blesearch) {
-                        rippleBackground.stopRippleAnimation();
-                        blesearch = false;
-
-                        foundDevice1.setVisibility(View.INVISIBLE);
-                        foundDevice2.setVisibility(View.INVISIBLE);
-                        foundDevice3.setVisibility(View.INVISIBLE);
-                        foundDevice4.setVisibility(View.INVISIBLE);
-
-
-                        //TODO BLE止める
-                        blePeriodicService.stopResident(getApplicationContext());
-                    } else {
-                        rippleBackground.startRippleAnimation();
-                        blesearch = true;
-
-                        foundDevice1.setVisibility(View.INVISIBLE);
-                        foundDevice2.setVisibility(View.INVISIBLE);
-                        foundDevice3.setVisibility(View.INVISIBLE);
-                        foundDevice4.setVisibility(View.INVISIBLE);
-
-                        //TODO BLEスタート
-                        blePeriodicService.startResident(getApplicationContext());
-                    }
-
-
-                } else if (1 == buttonIndex) {
-                    //マッチング画面遷移
-                    Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-                    long[] pattern = {3000, 1000, 2000, 5000, 3000, 1000}; // OFF/ON/OFF/ON...
-                    vibrator.vibrate(pattern, -1);
-                } else if (2 == buttonIndex) {
-                    // firebaseにデータを登録（サンプル）
-                    messageRef.setValue("テストメッセージ");
-                    //タイムライン画面遷移
-                    Intent intent = new Intent(getApplicationContext(), TimelineActivity.class);
-                    intent.putExtra(TAG_ORIENTATION, Orientation.vertical);
-                    startActivity(intent);
-                }
-            }
-        });
-
-
         //BLEサーチ
         rippleBackground = (RippleBackground) findViewById(R.id.content);
 
@@ -317,49 +263,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 
         foundDevice.setLayoutParams(param);
         animatorSet.start();
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-
-        //メニューボタン作成
-        Drawable[] subButtonDrawables = new Drawable[3];
-        int[] drawablesResource = new int[]{
-                R.drawable.ic_bluetooth_searching_white_48dp,
-                R.drawable.ic_people_white_48dp,
-                R.drawable.ic_settings_white_48dp
-        };
-        for (int i = 0; i < 3; i++)
-            subButtonDrawables[i] = ContextCompat.getDrawable(this, drawablesResource[i]);
-
-        String[] subButtonTexts = new String[]{"検索切替", "マッチング", "設定"};
-
-        int[][] subButtonColors = new int[3][2];
-        for (int i = 0; i < 3; i++) {
-            subButtonColors[i][1] = ContextCompat.getColor(this, R.color.colorPrimary);
-            subButtonColors[i][0] = Util.getInstance().getPressedColor(subButtonColors[i][1]);
-        }
-
-        boomMenuButton.init(
-                subButtonDrawables, // The drawables of images of sub buttons. Can not be null.
-                subButtonTexts,     // The texts of sub buttons, ok to be null.
-                subButtonColors,    // The colors of sub buttons, including pressed-state and normal-state.
-                ButtonType.CIRCLE,     // The button type.
-                BoomType.PARABOLA_2,  // The boom type.
-                PlaceType.CIRCLE_3_4,  // The place type.
-                null,               // Ease type to move the sub buttons when showing.
-                null,               // Ease type to scale the sub buttons when showing.
-                null,               // Ease type to rotate the sub buttons when showing.
-                null,               // Ease type to move the sub buttons when dismissing.
-                null,               // Ease type to scale the sub buttons when dismissing.
-                null,               // Ease type to rotate the sub buttons when dismissing.
-                null                // Rotation degree.
-        );
-
-        boomMenuButton.setTextViewColor(ContextCompat.getColor(this, R.color.black));
-        boomMenuButton.setSubButtonShadowOffset(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
-
     }
 
 
