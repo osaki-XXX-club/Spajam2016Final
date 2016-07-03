@@ -64,6 +64,8 @@ dependencies {
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
 
     compile 'com.github.rey5137:material:1.2.4'
+
+    compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
 }
 
 apply plugin: 'com.google.gms.google-services'
