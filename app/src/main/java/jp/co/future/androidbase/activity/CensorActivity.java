@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -85,10 +87,16 @@ public class CensorActivity extends Activity {
     private Handler mHandler = new Handler();
     private GoogleApiClient mClient;
 
+    //firebase
+    private DatabaseReference myRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_censor);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("message");
 
         touchValues = (TextView) findViewById(R.id.touchText);
         hiraganaValues = (TextView) findViewById(R.id.hiragana);
@@ -121,6 +129,9 @@ public class CensorActivity extends Activity {
                                 inputStreamList = Collections.synchronizedList(new ArrayList<TouchInputModel>());
 
                                 wordValues.setText("確定されたテキスト（送信）：" + new String(chars));
+                                // firebaseにデータを登録（サンプル）
+                                myRef.setValue(new String(chars));
+
 
                                 // 確定したらまた新規生成
                                 confirmCharList = new ArrayList<TouchInputModel>();
