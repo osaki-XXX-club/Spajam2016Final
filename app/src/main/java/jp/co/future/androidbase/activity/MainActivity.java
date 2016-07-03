@@ -1,32 +1,46 @@
 package jp.co.future.androidbase.activity;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Parcelable;
 import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.Types.BoomType;
 import com.nightonke.boommenu.Types.ButtonType;
@@ -35,22 +49,26 @@ import com.nightonke.boommenu.Util;
 import com.skyfishjy.library.RippleBackground;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
-import jp.co.future.androidbase.Orientation;
 import jp.co.future.androidbase.R;
+import jp.co.future.androidbase.activity.base.usingBluetooth.ActivityUsingBluetooth;
 import jp.co.future.androidbase.fragment.MainActivityFragment;
 import jp.co.future.androidbase.service.BlePeriodicService;
 import jp.co.future.androidbase.util.BleUtil;
+import android.view.View.OnClickListener;
 
-public class MainActivity extends AppCompatActivity implements MainActivityFragment.OnFragmentInteractionListener {
+
+public class MainActivity extends ActivityUsingBluetooth implements MainActivityFragment.OnFragmentInteractionListener,Runnable {
 
 
     /**
      * ログ出力用タグ
      */
     private static final String TAG = MainActivity.class.getSimpleName();
-    public final static String TAG_ORIENTATION = "orientation";
 
     /**
      * クラス名
@@ -110,6 +128,19 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
     //firebase
     private DatabaseReference messageRef;
 
+    //ble alpus
+    private ListView listFoundBLEDevices;
+    private ArrayAdapter<BLEDevice> adapterFoundBLEDevices;
+    private LinkedHashMap<String, BLEDevice> foundBLEDevices;
+    public static final int DELAY_MILLIS_UPDATE_SCAN_RESULTS_FIRST = 10000;
+    public static final int DELAY_MILLIS_UPDATE_SCAN_RESULTS_INTERVAL = 500;
+    // define splash hold time
+    private final long SPLASH_HOLD_TIME = 1000L;
+    // define request code
+    private final int REQUEST_ENABLE_BLUETOOTH = 0;
+    private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
+    public static final boolean BLE_DEVICE_FILTERING_ENABLE = true;
+    public static final String BLE_DEVICE_NAME_FILTERING_REGULAR_EXPRESSION = "^SNM.*";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,73 +164,116 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
             finish();
         }
 
+        if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("This app needs location access");
+            builder.setMessage("Please grant location access so this app can detect beacons.");
+            builder.setPositiveButton(android.R.string.ok, null);
+            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
+                }
+            });
+            builder.show();
+        }
+
         init();
 
-        // bleを受診した時のレシーバ
-        bleReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                // 前画面からパラメータを取得する
-                device = intent.getStringExtra("device");
-                rssi = intent.getIntExtra("rssi", 0);
-                Log.d(TAG, "device =" + device);
-
-                //デバイスIDで誰のBLEか判定する
-                //if ("6A:5F:CD:4A:C4:AA".equalsIgnoreCase(device)) {//検証機
-                if ("5F:0E:66:9B:34:F2".equalsIgnoreCase(device) || "6A:5F:CD:4A:C4:AA".equalsIgnoreCase(device)) {//淳平さん
-
-                    //小川
-                    if (!foundDevice1.isShown()) {
-                        foundDevice(foundDevice1);
-                    }
-
-
-                } else if ("2".equalsIgnoreCase(device)) {
-                    //真野
-                    if (!foundDevice2.isShown()) {
-                        foundDevice(foundDevice2);
-                    }
-                } else if ("98:4F:EE:0F:75:1F".equalsIgnoreCase(device)) {
-                    //Arudino
-                    if (!foundDevice3.isShown()) {
-                        foundDevice(foundDevice3);
-                    }
-                } else if ("28:A1:83:31:16:B6".equalsIgnoreCase(device)) {
-                    //タグ
-                    if (!foundDevice4.isShown()) {
-                        foundDevice(foundDevice4);
-                    }
-                }
-            }
-        };
+//spajam-finalでは不使用のためコメントアウト
+//        // bleを受診した時のレシーバ
+//        bleReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                // 前画面からパラメータを取得する
+//                device = intent.getStringExtra("device");
+//                rssi = intent.getIntExtra("rssi", 0);
+//                Log.d(TAG, "device =" + device);
+//
+//                //デバイスIDで誰のBLEか判定する
+//                //if ("6A:5F:CD:4A:C4:AA".equalsIgnoreCase(device)) {//検証機
+//                if ("5F:0E:66:9B:34:F2".equalsIgnoreCase(device) || "6A:5F:CD:4A:C4:AA".equalsIgnoreCase(device)) {//淳平さん
+//
+//                    //小川
+//                    if (!foundDevice1.isShown()) {
+//                        foundDevice(foundDevice1);
+//                    }
+//
+//
+//                } else if ("2".equalsIgnoreCase(device)) {
+//                    //真野
+//                    if (!foundDevice2.isShown()) {
+//                        foundDevice(foundDevice2);
+//                    }
+//                } else if ("98:4F:EE:0F:75:1F".equalsIgnoreCase(device)) {
+//                    //Arudino
+//                    if (!foundDevice3.isShown()) {
+//                        foundDevice(foundDevice3);
+//                    }
+//                } else if ("28:A1:83:31:16:B6".equalsIgnoreCase(device)) {
+//                    //タグ
+//                    if (!foundDevice4.isShown()) {
+//                        foundDevice(foundDevice4);
+//                    }
+//                }
+//            }
+//        };
 
         // firebaseのセットアップ
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        messageRef = database.getReference("message");
+        messageRef =  database.getReference("message");
+
+        // firebaseにデータを登録（サンプル）
+        messageRef.setValue("テストメッセージ");
 
         // Read from the database
-//        messageRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                // This method is called once with the initial value and again
-//                // whenever data at this location is updated.
-//                String value = (String) dataSnapshot.getValue();
-//                Log.d("Firebase", "Value is: " + value);
-//
-////                TimeLineModel model = new TimeLineModel();
-////                model.setName(value);
-////                model.setAge(100);
-////                TimelineActivity.getmDataList().add(model);
-////                TimelineActivity.getmTimeLineAdapter().notifyDataSetChanged();
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError error) {
-//                // Failed to read value
-//                Log.w("Firebase", "Failed to read value.", error.toException());
-//            }
-//        });
+        messageRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                String value = (String) dataSnapshot.getValue();
+                Log.d("Firebase", "Value is: " + value);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("Firebase", "Failed to read value.", error.toException());
+            }
+        });
+
+
+
+        // ble connect to alplus
+        // get bluetooth adapter
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        boolean isFeature = getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE);
+        if (!isFeature || adapter == null) {
+            // show dialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(getString(R.string.msg_bluetooth_useless));
+            builder.setNegativeButton(R.string.dialog_button_cancel, null);
+            builder.setPositiveButton(R.string.dialog_button_ok,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    });
+            builder.setCancelable(false);
+            builder.show();
+        } else {
+            if (adapter.isEnabled()) {
+                // show splash
+                Handler handler = new Handler();
+                handler.postDelayed(this, SPLASH_HOLD_TIME);
+            } else {
+                // show dialog
+                Intent intentStart = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(intentStart, REQUEST_ENABLE_BLUETOOTH);
+            }
+        }
     }
 
     @Override
@@ -208,7 +282,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         super.onResume();
 
         // レシーバの登録
-        registerReceiver(bleReceiver, new IntentFilter(BLE_CALLBACK_INTENT));
+        //registerReceiver(bleReceiver, new IntentFilter(BLE_CALLBACK_INTENT));
 
 
         //メニューボタン
@@ -253,12 +327,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
                     long[] pattern = {3000, 1000, 2000, 5000, 3000, 1000}; // OFF/ON/OFF/ON...
                     vibrator.vibrate(pattern, -1);
                 } else if (2 == buttonIndex) {
-                    // firebaseにデータを登録（サンプル）
-                    messageRef.setValue("テストメッセージ");
-                    //タイムライン画面遷移
-                    Intent intent = new Intent(getApplicationContext(), TimelineActivity.class);
-                    intent.putExtra(TAG_ORIENTATION, Orientation.vertical);
-                    startActivity(intent);
+                    //設定画面遷移
                 }
             }
         });
@@ -273,7 +342,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         foundDevice3 = (ImageView) findViewById(R.id.foundDevice3);
         foundDevice4 = (ImageView) findViewById(R.id.foundDevice4);
 
+        // ble alpus
+        listFoundBLEDevices = (ListView) findViewById(R.id.list);
+        initializeScanList();
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        toggleScanning(true);
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     private void foundDevice(ImageView foundDevice) {
@@ -299,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         rightDp = rnd.nextInt(250) - 50;
         bottomDp = rnd.nextInt(250) - 50;
         leftDp = rnd.nextInt(500) + 50 + 400;
-        topDp = rnd.nextInt(800) + 500;
+        topDp = rnd.nextInt(800)+ 500;
 
         Log.d(TAG, "左：" + leftDp);
         Log.d(TAG, "上：" + topDp);
@@ -368,49 +447,72 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         super.onPause();
 
         // ブロードキャストレシーバの解除
-        unregisterReceiver(bleReceiver);
+//        unregisterReceiver(bleReceiver);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         //TODO BLE止める
-        blePeriodicService.stopResident(getApplicationContext());
+        //blePeriodicService.stopResident(getApplicationContext());
 
-        Intent intent = new Intent(this, BlePeriodicService.class);
+        //Intent intent = new Intent(this, BlePeriodicService.class);
 
         // サービスの停止
-        stopService(intent);
+        //stopService(intent);
 
 
     }
 
     @Override
-    public void onFoundDeviceClicked(View v) {
-        //IDごとに遷移
-        // 画面へ遷移
-        // インテントのインスタンス生成
-        Intent intent = new Intent(this, UserDetailActivity.class);
-        if (v.getId() == foundDevice1.getId()) {
-            intent.putExtra("id", "ogawatachi");
-        }
-        if (v.getId() == foundDevice2.getId()) {
-            intent.putExtra("id", "laqiiz");
-        }
-        if (v.getId() == foundDevice3.getId()) {
-            intent.putExtra("id", "keigodasu");
-        }
-        if (v.getId() == foundDevice4.getId()) {
-            intent.putExtra("id", "sadayuki-matsuno");
-        }
+    protected void onChangeBluetoothState(boolean on) {
+        toggleScanning(on);
+    }
 
+//    @Override
+//    public void onFoundDeviceClicked(View v) {
+//        //IDごとに遷移
+//        // 画面へ遷移
+//        // インテントのインスタンス生成
+//        Intent intent = new Intent(this, UserDetailActivity.class);
+//        if (v.getId() == foundDevice1.getId()) {
+//            intent.putExtra("id", "ogawatachi");
+//        }
+//        if (v.getId() == foundDevice2.getId()) {
+//            intent.putExtra("id", "laqiiz");
+//        }
+//        if (v.getId() == foundDevice3.getId()) {
+//            intent.putExtra("id", "keigodasu");
+//        }
+//        if (v.getId() == foundDevice4.getId()) {
+//            intent.putExtra("id", "sadayuki-matsuno");
+//        }
+//
+//
+//        //intent.putExtra("id", "laqiiz");
+////        intent.putExtra("subMode", CommonKbnConst.VAL_MODE_HAITATU);
+////        intent.putExtra("clear", true);
+//        // 次画面のアクティビティ起動
+//        startActivity(intent);
+//
+//    }
 
-        //intent.putExtra("id", "laqiiz");
-//        intent.putExtra("subMode", CommonKbnConst.VAL_MODE_HAITATU);
-//        intent.putExtra("clear", true);
-        // 次画面のアクティビティ起動
-        startActivity(intent);
+    @Override
+    protected void onFoundBLEDevice(BLEDevice bleDevice) {
+        //Log.d("BLE","onFoundBLEDevice: bleDevice ="+bleDevice.toString());
+        String name = bleDevice.getName();
+        //Log.d("BLE","onFoundBLEDevice: name ="+name);
 
+        if (BLE_DEVICE_FILTERING_ENABLE) {
+            if (!name.matches(BLE_DEVICE_NAME_FILTERING_REGULAR_EXPRESSION)) {
+                return;
+            }
+        }
+        Log.d("BLE","アルプス見つけたよー。："+name);
+        synchronized (foundBLEDevices) {
+            foundBLEDevices.put(bleDevice.getAddress(), bleDevice);
+            Log.d("BLE","foundBLEDevices = "+foundBLEDevices);
+        }
     }
 
     /*
@@ -426,26 +528,32 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
             return;
         }
 
-        //TODO BLE止める
-        blePeriodicService.stopResident(getApplicationContext());
-
-        // BT check
-        BluetoothManager bluetoothManager = BleUtil.getManager(this);
-        if (bluetoothManager != null) {
-            Log.d(TAG, "mBluetoothAdapter取得");
-            mBluetoothAdapter = bluetoothManager.getAdapter();
-        }
-
-        if (mBluetoothAdapter.getScanMode() !=
-                BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
-            Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
-            startActivity(discoverableIntent);
-        }
+//spajam-finalでは不使用のためコメントアウト
+//        //TODO BLE止める
+//        blePeriodicService.stopResident(getApplicationContext());
+//
+//        // BT check
+//        BluetoothManager bluetoothManager = BleUtil.getManager(this);
+//        if (bluetoothManager != null) {
+//            Log.d(TAG, "mBluetoothAdapter取得");
+//            mBluetoothAdapter = bluetoothManager.getAdapter();
+//        }
+//
+//        if (mBluetoothAdapter.getScanMode() !=
+//                BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
+//            Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+//            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
+//            startActivity(discoverableIntent);
+//        }
 
 
     }
 
+
+    @Override
+    public void onFoundDeviceClicked(View v) {
+
+    }
 
     @Override
     public void onCenterImageClicked(View v) {
@@ -515,9 +623,110 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 ////        startActivity(intent);
 //    }
 //
-//    @Override
-//    public void onKaijoClicked(View v) {
-//
-//    }
+    @Override
+    public void onBUttonSelectClicked(View v) {
+        List<Parcelable> parcelableList = new ArrayList<Parcelable>();
+        //set view
+        SparseBooleanArray array = listFoundBLEDevices.getCheckedItemPositions();
+        for (int i = 0; i < foundBLEDevices.size(); i++) {
+            boolean checked = array.get(i);
+            if (checked) {
+                BLEDevice bleDevice = adapterFoundBLEDevices.getItem(i);
+                BluetoothDevice bluetoothDevice = bleDevice.getBluetoothDevice();
+                parcelableList.add(bluetoothDevice);
 
+                //Log.d("BLE", "position : %d (%s)", i, bluetoothDevice);
+            }
+        }
+
+        int size = parcelableList.size();
+        if ((0 < size) && (size <= 4)) {
+            toggleScanning(false);
+            connectToTarget(parcelableList);
+        } else {
+            Toast.makeText(MainActivity.this, "Please select the sensor modules less than 4.", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+    private void connectToTarget(List<Parcelable> parcelableList) {
+        int size = parcelableList.size();
+        if (size > 0) {
+            final Parcelable parcelables [] = new Parcelable[parcelableList.size()];
+            parcelableList.toArray(parcelables);
+
+            String body = getString(R.string.connect_to_following_devices);
+
+            for (Parcelable parcelable : parcelables) {
+                BluetoothDevice bluetoothDevice = (BluetoothDevice) parcelable;
+                //Log.d(TAG, "putExtra : %s", bluetoothDevice);
+                body += String.format("\n%s (%s)", (bluetoothDevice.getName()==null)?getString(R.string.no_device_name):bluetoothDevice.getName(), bluetoothDevice.getAddress());
+            }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(body);
+            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    adapterFoundBLEDevices.clear();
+
+                    Intent intent = new Intent(getApplicationContext(), ActivitySensorCommunication.class);
+                    intent.putExtra(ActivitySensorCommunication.EXTRAS_DEVICES, parcelables);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            });
+            builder.setNegativeButton(R.string.dialog_button_cancel, null);
+            builder.setCancelable(false);
+            builder.show();
+        }
+    }
+    private void initializeScanList() {
+        Log.d("BLE","initializeScanList");
+        foundBLEDevices = new LinkedHashMap<String, BLEDevice>();
+        adapterFoundBLEDevices = new AdapterBLEDevice(getApplicationContext(), R.layout.custom_row, foundBLEDevices);
+        listFoundBLEDevices.setAdapter(adapterFoundBLEDevices);
+    }
+
+    protected void toggleScanning(final boolean enable) {
+        updateLoopHandler.removeCallbacksAndMessages(null);
+
+        invalidateOptionsMenu();
+
+        enableScanning(enable);
+
+        if (enable) {
+            //Log.d("BLE","enable ="+enable);
+            // Start runnable-loop to update ListView at fixed intervals
+            updateLoopHandler.postDelayed(runnableLoopingUpdate, DELAY_MILLIS_UPDATE_SCAN_RESULTS_FIRST);
+        }
+    }
+    private Handler updateLoopHandler = new Handler(Looper.getMainLooper());
+    private Runnable runnableLoopingUpdate = new Runnable() {
+        @Override
+        public void run() {
+            //Log.d("BLE","isScanning ="+isScanning);
+
+            if (isScanning) {
+                synchronized (foundBLEDevices) {
+                    if (adapterFoundBLEDevices != null) {
+                        //Log.d("BLE","runnableLoopingUpdate");
+                        adapterFoundBLEDevices.clear();
+                        adapterFoundBLEDevices.addAll(foundBLEDevices.values());
+                        for(String i: foundBLEDevices.keySet() ){
+                            Log.d("BLEhoge",i);
+                        }
+
+                        adapterFoundBLEDevices.notifyDataSetChanged();
+                    }
+                }
+
+                updateLoopHandler.postDelayed(this, DELAY_MILLIS_UPDATE_SCAN_RESULTS_INTERVAL);
+            }
+        }
+    };
+
+    @Override
+    public void run() {
+
+    }
 }

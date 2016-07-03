@@ -68,7 +68,7 @@ public class MainActivityFragment extends Fragment {
         rootView.findViewById(R.id.centerImage).setOnClickListener(buttonClickListener);
 
         // 設定ボタンがクリックされた時の処理
-        //rootView.findViewById(R.id.btn_kaijo).setOnClickListener(buttonClickListener);
+        rootView.findViewById(R.id.button_select).setOnClickListener(buttonClickListener);
 
         return rootView;
     }
@@ -89,6 +89,8 @@ public class MainActivityFragment extends Fragment {
                 mListener.onFoundDeviceClicked(v);
             } else if (id == R.id.centerImage) {
                 mListener.onCenterImageClicked(v);
+            }else if (id == R.id.button_select) {
+                mListener.onBUttonSelectClicked(v);
             }
 
         }
@@ -124,6 +126,9 @@ public class MainActivityFragment extends Fragment {
 
         // 一ボタンがクリックされた時
         public void onCenterImageClicked(View v);
+
+        // 一ボタンがクリックされた時
+        public void onBUttonSelectClicked(View v);
 
         // 一ボタンがクリックされた時
         //public void onKaijoClicked(View v);
