@@ -42,6 +42,8 @@ import java.util.Locale;
 
 import jp.co.future.androidbase.Orientation;
 import jp.co.future.androidbase.R;
+import jp.co.future.androidbase.adapter.InitialAdapter;
+import jp.co.future.androidbase.model.InitialModel;
 import jp.co.future.androidbase.model.TimeLineModel;
 // other imports and package statement are omitted
 
@@ -63,6 +65,15 @@ public class InitialActivity extends AppCompatActivity
 
     private TextToSpeech tts;
 
+    private String listName[] = {"SPAJAM2016 FINAL", "くまがや温泉会議", "さいたま温泉会議", "ソフトバンク温泉会議",
+            "ふじつう温泉会議", "コロプラ温泉会議", "ドワンゴ温泉会議", "DeNA温泉会議", "アイスタイル温泉会議",
+            "おおさき温泉会議", "ごたんだ温泉会議", "ヘリテージ温泉会議",
+            "おおさき温泉会議", "ごたんだ温泉会議", "ヘリテージ温泉会議"};
+    private int imgName[] = {R.drawable.spajam, R.drawable.pho_slide_conference_02, R.drawable.iiyama, R.drawable.onsen
+            , R.drawable.pho_slide_conference_02, R.drawable.onsen, R.drawable.pho_slide_conference_02, R.drawable.iiyama
+            , R.drawable.pho_slide_conference_02, R.drawable.onsen, R.drawable.pho_slide_conference_02, R.drawable.iiyama
+            , R.drawable.pho_slide_conference_02, R.drawable.iiyama, R.drawable.onsen};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,12 +84,18 @@ public class InitialActivity extends AppCompatActivity
         listView.setScrollViewCallbacks(this);
 
         // TODO These are dummy. Populate your data here.
-        ArrayList<String> items = new ArrayList<String>();
-        for (int i = 1; i <= 100; i++) {
-            items.add("Item " + i);
+        ArrayList<InitialModel> items = new ArrayList<>();
+        for (int i = 0; i < listName.length; i++) {
+            InitialModel model = new InitialModel();
+            model.setName(listName[i]);
+            model.setImg(imgName[i]);
+            items.add(model);
         }
-        listView.setAdapter(new ArrayAdapter<String>(
-                this, android.R.layout.simple_list_item_1, items));
+
+
+        InitialAdapter adapter = new InitialAdapter(this);
+        adapter.setInitialList(items);
+        listView.setAdapter(adapter);
 
         // アイテムクリック時ののイベントを追加
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -87,7 +104,7 @@ public class InitialActivity extends AppCompatActivity
 
                 // 選択アイテムを取得
                 ListView listView = (ListView) parent;
-                String item = (String) listView.getItemAtPosition(pos);
+                InitialModel item = (InitialModel) listView.getItemAtPosition(pos);
 
                 // firebaseにデータを登録（サンプル）
                 // myRef.setValue("テストメッセージ");
@@ -97,11 +114,6 @@ public class InitialActivity extends AppCompatActivity
                 Intent intent = new Intent(getApplicationContext(), TimelineActivity.class);
                 intent.putExtra(TAG_ORIENTATION, Orientation.vertical);
                 startActivity(intent);
-
-//                // 通知ダイアログを表示
-//                Toast.makeText(InitialActivity.this,
-//                        item, Toast.LENGTH_LONG
-//                ).show();
             }
         });
 
@@ -217,12 +229,12 @@ public class InitialActivity extends AppCompatActivity
         int[] drawablesResource = new int[]{
                 R.drawable.ic_bluetooth_searching_white_48dp,
 //                R.drawable.ic_people_white_48dp,
-                R.drawable.ic_settings_white_48dp
+                R.drawable.ic_touch_app_white_48dp
         };
         for (int i = 0; i < 2; i++)
             subButtonDrawables[i] = ContextCompat.getDrawable(this, drawablesResource[i]);
 
-        String[] subButtonTexts = new String[]{"デバイス検索", "設定"};
+        String[] subButtonTexts = new String[]{"専用デバイス検索", "タッチモード"};
 
         int[][] subButtonColors = new int[2][2];
         for (int i = 0; i < 2; i++) {
