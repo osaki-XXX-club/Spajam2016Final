@@ -31,5 +31,17 @@
 
     <string name="title_activity_ttl">TtlActivity</string>
 
+    <!-- ble alpus-->
+    <string name="connect_to_following_devices">Connect to following devices:</string>
+    <string name="no_device_name">No-Name</string>
+    <string name="dialog_button_cancel">Cancel</string>
+    <string name="msg_default_text">\n\n\n\n\n\n</string>
+    <string name="msg_bluetooth_useless">Sorry, it does not support Bluetooth LE. Tap to finish.</string>
+    <string name="dialog_button_ok">OK</string>
+    <string name="button_logging_on">LOGGING ON</string>
+    <string name="button_logging_off">LOGGING OFF</string>
+    <string name="button_measure_on">MEASURE ON</string>
+    <string name="button_measure_off">MEASURE OFF</string>
+    <string name="button_measure_force">FORCE SAMPLING</string>
 
 </resources>
