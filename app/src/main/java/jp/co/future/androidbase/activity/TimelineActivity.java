@@ -174,7 +174,7 @@ public class TimelineActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onPause() {
         super.onPause();
-        myRef.removeEventListener(eventL);
+        // myRef.removeEventListener(eventL);
     }
 
     @Override
