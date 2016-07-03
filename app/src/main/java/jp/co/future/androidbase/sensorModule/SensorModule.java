@@ -784,7 +784,7 @@ public class SensorModule {
 			isWait = true;
 			dataCount = 0;
 			try {
-				String txt = "ペントントン";
+				String txt = "ガンガン行こうぜ";
 				myRef.setValue(txt);
 			}catch (Exception e){
 				Log.d(TAG,e.toString());
@@ -795,7 +795,7 @@ public class SensorModule {
 			isWait = true;
 			dataCount = 0;
 			try {
-				String txt = "ペンくるくる";
+				String txt = "慎重に";
 				myRef.setValue(txt);
 			}catch (Exception e){
 				Log.d(TAG,e.toString());
