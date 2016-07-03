@@ -7,6 +7,9 @@ import java.io.Serializable;
  */
 public class TimeLineModel {
     private String name;
+
+
+    private String msg;
     private int age;
 
     public String getName() {
@@ -24,4 +27,13 @@ public class TimeLineModel {
     public void setAge(int age) {
         this.age = age;
     }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
 }

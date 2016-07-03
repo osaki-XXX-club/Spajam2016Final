@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Base</string>
+    <string name="app_name">SPAJAM2016 FINAL</string>
     <string name="title_spider">すれ違ったユーザー</string>
     <string name="btn_ble">BLE検索</string>
     <string name="btn_aa">テスト２</string>
@@ -29,14 +29,6 @@
     <string name="user_jobtitle">ソフトウェアエンジニア</string>
 
 
-    <string-array name="haitatsusaki">
-        <item>a</item>
-        <item>b</item>
-    </string-array>
-    <string-array name="mikanryo">
-        <item>1</item>
-        <item>2</item>
-    </string-array>
     <string name="title_activity_ttl">TtlActivity</string>
 
     <!-- ble alpus-->
