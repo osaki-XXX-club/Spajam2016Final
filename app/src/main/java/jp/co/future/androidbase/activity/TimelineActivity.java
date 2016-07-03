@@ -55,6 +55,8 @@ public class TimelineActivity extends AppCompatActivity implements View.OnClickL
 
     private Button sentBtn;
 
+    private boolean sayFlg = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +125,7 @@ public class TimelineActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onInit(int status) {
+        sayFlg = false;
         Log.d(TAG, "onInit");
         if (TextToSpeech.SUCCESS == status) {
             Locale locale = Locale.JAPAN;
@@ -142,11 +145,6 @@ public class TimelineActivity extends AppCompatActivity implements View.OnClickL
                 // whenever data at this location is updated.
                 String value = dataSnapshot.getValue(String.class);
                 Log.d(TAG, "Value is: " + value);
-                TimeLineModel model = new TimeLineModel();
-                model.setName(value);
-                model.setAge(100);
-                mDataList.add(model);
-                mTimeLineAdapter.notifyDataSetChanged();
 
 
                 // TODO バイブレーションパターン
@@ -155,7 +153,12 @@ public class TimelineActivity extends AppCompatActivity implements View.OnClickL
                 //long[] pattern = {100, 100}; // OFF/ON/OFF/ON...
                 vibrator.vibrate(pattern, -1);
 
-                speechText(value);
+                if(sayFlg){
+                    speechText(value);
+                }else{
+                    sayFlg = true;
+                }
+
             }
 
             @Override
@@ -165,6 +168,7 @@ public class TimelineActivity extends AppCompatActivity implements View.OnClickL
             }
         };
 
+        //myRef.removeEventListener(eventL);
         // Read from the database
         myRef.addValueEventListener(eventL);
 
@@ -174,7 +178,7 @@ public class TimelineActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onPause() {
         super.onPause();
-        // myRef.removeEventListener(eventL);
+        myRef.removeEventListener(eventL);
     }
 
     @Override
@@ -230,6 +234,12 @@ public class TimelineActivity extends AppCompatActivity implements View.OnClickL
             // 読み上げ中なら止める
             tts.stop();
         }
+
+        TimeLineModel model = new TimeLineModel();
+        model.setName(word);
+        model.setAge(100);
+        mDataList.add(model);
+        mTimeLineAdapter.notifyDataSetChanged();
 
         // TODO 音量調整
 
