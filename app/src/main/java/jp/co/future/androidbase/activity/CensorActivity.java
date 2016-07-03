@@ -3,6 +3,8 @@ package jp.co.future.androidbase.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.TextView;
@@ -15,14 +17,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import jp.co.future.androidbase.R;
+import jp.co.future.androidbase.model.TimeLineModel;
 import jp.co.future.androidbase.model.TouchInputModel;
 
-public class CensorActivity extends Activity {
+public class CensorActivity extends Activity implements TextToSpeech.OnInitListener {
+
+    private TextToSpeech tts;
 
     /*
      * 画面
@@ -43,7 +49,9 @@ public class CensorActivity extends Activity {
      */
     private List<TouchInputModel> inputStreamList = new ArrayList<>();
 
-    /** 入力が確定した「文字」のリスト */
+    /**
+     * 入力が確定した「文字」のリスト
+     */
     private List<TouchInputModel> confirmCharList = new ArrayList<>();
 
     /*
@@ -65,13 +73,15 @@ public class CensorActivity extends Activity {
     /**
      * 入力から何秒間経過すると、文字確定するかのしきい値[秒]
      */
-    private static final double INPUT_TERM_THRESHOLD = 0.4;
+    private static final double INPUT_TERM_THRESHOLD = 0.6;
     /**
      * 入力から何秒間通過すると、テキスト確定するかのしきい値[秒]
      */
     private static final double LINE_BREAK_THRESHOLD = 3.0;
 
-    /** 最後に入力した時間（テキスト確定処理で利用） */
+    /**
+     * 最後に入力した時間（テキスト確定処理で利用）
+     */
     private long lastInputTime = 0;
 
     /**
@@ -94,6 +104,9 @@ public class CensorActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_censor);
+
+        // TextToSpeechオブジェクトの生成
+        tts = new TextToSpeech(this, this);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         myRef = database.getReference("message");
@@ -131,6 +144,7 @@ public class CensorActivity extends Activity {
                                 wordValues.setText("確定されたテキスト（送信）：" + new String(chars));
                                 // firebaseにデータを登録（サンプル）
                                 myRef.setValue(new String(chars));
+                                speechText(new String(chars));
 
 
                                 // 確定したらまた新規生成
@@ -185,6 +199,11 @@ public class CensorActivity extends Activity {
     }
 
     @Override
+    public void onInit(int status) {
+
+    }
+
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
 
         float pointX = event.getX();
@@ -231,7 +250,8 @@ public class CensorActivity extends Activity {
             char hiragana = HIRAGANA_MAP[(touchList.size() - 1) % (HIRAGANA_MAP.length)][(maxPointerCount - 1) % 5];
 
             hiraganaValues.setText("判定された文字：" + hiragana);
-            myRef.setValue(new String(new char[]{hiragana}));
+            //myRef.setValue(new String(new char[]{hiragana}));
+            speechText(new String(new char[]{hiragana}));
 
             // 入力された文字を追加
             touchInput.setCharset(hiragana);
@@ -259,6 +279,30 @@ public class CensorActivity extends Activity {
 //            mTimer.cancel();
 //            mTimer = null;
 //        }
+    }
+
+    private void speechText(String word) {
+
+//        Intent i = getIntent();
+//        String word = i.getStringExtra("word");
+
+        if (tts.isSpeaking()) {
+            // 読み上げ中なら止める
+            tts.stop();
+        }
+
+
+        // TODO バイブレーションパターン
+//        Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+//        long[] pattern = {100, 1000, 100, 2000}; // OFF/ON/OFF/ON...
+//        //long[] pattern = {100, 100}; // OFF/ON/OFF/ON...
+//        vibrator.vibrate(pattern, -1);
+
+        // TODO 音量調整
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        tts.speak(word, TextToSpeech.QUEUE_FLUSH, params);
+
     }
 
 }
