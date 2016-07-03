@@ -3,7 +3,12 @@ package jp.co.future.androidbase.sensorModule;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.util.Log;
+import android.widget.EditText;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import jp.co.future.androidbase.R;
 import jp.co.future.androidbase.log.Logg;
 import jp.co.future.androidbase.sensorModule.command.Commander;
 import jp.co.future.androidbase.sensorModule.command.control.*;
@@ -20,7 +25,11 @@ import jp.co.future.androidbase.sensorModule.enums.Sensor;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 import java.util.Set;
+
 
 
 /**
@@ -34,6 +43,24 @@ import java.util.Set;
  * {@link com.alps.sample.sensorModule.SensorModule.ISensorModule}を利用してイベント通知を行います。
  */
 public class SensorModule {
+
+	// firebase
+
+	private LinkedList<Float> accXList = new LinkedList<Float>();
+	private LinkedList<Float> accYList = new LinkedList<Float>();
+	private LinkedList<Float> accZList = new LinkedList<Float>();
+	private LinkedList<Float> magXList = new LinkedList<Float>();
+	private LinkedList<Float> magYList = new LinkedList<Float>();
+	private LinkedList<Float> magZList = new LinkedList<Float>();
+
+	private int dataCount = 0;
+	private boolean isWait = false;
+
+	final FirebaseDatabase database =FirebaseDatabase.getInstance();
+	private DatabaseReference myRef = database.getReference("message");
+
+
+
 	private static final String TAG = "SensorModule";
 
 	/**
@@ -183,7 +210,7 @@ public class SensorModule {
 		Logg.d(TAG, "new SensorModule(%s)", name);
 
 		bleConnect = new BLEConnect(context, bluetoothDevice, iBLEConnect);
-		logger = new DataLogger(context, name);
+		//logger = new DataLogger(context, name);
 	}
 
 
@@ -257,7 +284,7 @@ public class SensorModule {
 			}
 		});
 
-		logger.requestToScanMediaForUpdatingLogFile();
+		//logger.requestToScanMediaForUpdatingLogFile();
 	}
 
 
@@ -281,7 +308,7 @@ public class SensorModule {
 			return;
 		}
 
-		logger.clear(this);
+		//logger.clear(this);
 
 		bridgeICommander = iCommander;
 		commander = new Commander();
@@ -394,7 +421,7 @@ public class SensorModule {
 			}
 		});
 
-		logger.requestToScanMediaForUpdatingLogFile();
+		//logger.requestToScanMediaForUpdatingLogFile();
 	}
 
 
@@ -513,6 +540,7 @@ public class SensorModule {
 							latestData.minute = temp.getMinute();
 							latestData.hour = temp.getHour();
 							sensorData = temp;
+							penActionLogic(temp);
 							break;
 						}
 						case SensorDataPacketPreHumTemUVAmLight.EVENT_CODE: {
@@ -560,13 +588,14 @@ public class SensorModule {
 						Logg.d(TAG, "recvSensorData : %s", sensorData);
 
 						latestData.index = sensorData.getIndex();
-						logger.writeSensorData(SensorModule.this);
+						//logger.writeSensorData(SensorModule.this);
 
 						if (shouldNotify) {
 							if (iSensorModule != null) {
 								iSensorModule.onReceiveNotificationSensorData(tag);
 							}
 						}
+
 					}
 					break;
 				}
@@ -679,7 +708,7 @@ public class SensorModule {
 			bleConnect.connect();
 		}
 
-		logger.requestToScanMediaForUpdatingLogFile();
+		//logger.requestToScanMediaForUpdatingLogFile();
 	}
 
 	/**
@@ -690,7 +719,7 @@ public class SensorModule {
 	public void deactivate() {
 		Logg.d(TAG, "deactivate (%s)", name);
 		innerSequence = InnerSequence.Deactivated;
-		logger.release(this);
+		//logger.release(this);
 
 		bridgeICommander = null;
 
@@ -700,7 +729,7 @@ public class SensorModule {
 			commander.abort();
 		}
 
-		logger.requestToScanMediaForUpdatingLogFile();
+		//logger.requestToScanMediaForUpdatingLogFile();
 	}
 
 	/**
@@ -711,7 +740,7 @@ public class SensorModule {
 	 */
 	public void disconnect() {
 		bleConnect.disconnect();
-		logger.requestToScanMediaForUpdatingLogFile();
+		//logger.requestToScanMediaForUpdatingLogFile();
 	}
 
 
@@ -734,4 +763,53 @@ public class SensorModule {
 			Logg.d(TAG, "[ERROR] command is not valid!");
 		}
 	}
+
+	public void penActionLogic(SensorDataPacketMagAcc sensorData) {
+
+
+		// firebaseにデータを登録（サンプル）
+		accXList.addFirst((float) sensorData.getAccX());
+		accYList.addFirst((float) sensorData.getAccY());
+		accZList.addFirst((float) sensorData.getAccZ());
+		magXList.addFirst((float) sensorData.getMagX());
+		magYList.addFirst((float) sensorData.getMagY());
+		magZList.addFirst((float) sensorData.getMagZ());
+
+
+		Log.d("acc-data", "accX=" + accXList.get(0) + " accYList=" + accYList.get(0) + "accZList=" + accZList.get(0));
+		Log.d("mag-data","magX="+magXList.get(0)+" magY="+magYList.get(0)+"magZ="+magZList.get(0));
+
+		// ペントントン
+		if(isWait == false && accXList.get(1) - accXList.get(0) < -500 || 500 < accXList.get(1) - accXList.get(0) ) {
+			isWait = true;
+			dataCount = 0;
+			try {
+				String txt = "ガンガン行こうぜ";
+				myRef.setValue(txt);
+			}catch (Exception e){
+				Log.d(TAG,e.toString());
+			};
+		}
+		// ペンくるくる想定（サンプルではペンを横に振るだけで反応）
+		else if(isWait == false && accZList.get(1) - accZList.get(0) < -500 || 500 < accZList.get(1) - accZList.get(0)) {
+			isWait = true;
+			dataCount = 0;
+			try {
+				String txt = "慎重に";
+				myRef.setValue(txt);
+			}catch (Exception e){
+				Log.d(TAG,e.toString());
+			};
+		}
+		if (isWait == true && dataCount == 3){
+			isWait = false;
+		}
+		dataCount++;
+
+//		Random r = new Random();
+//		int n = r.nextInt(50);
+//		String txt = "sample" + n;
+//		myRef.setValue(txt);
+	}
+
 }

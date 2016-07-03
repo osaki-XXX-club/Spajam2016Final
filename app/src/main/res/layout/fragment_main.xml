@@ -21,12 +21,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CONNECT" />
+
         <ListView
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_weight="1"
-            android:choiceMode="multipleChoice" />
+            android:choiceMode="multipleChoice"
+            android:layout_toEndOf="@+id/button_select"/>
+
+
+
+
+
 
         <com.skyfishjy.library.RippleBackground xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -62,7 +69,7 @@
             <!--android:visibility="invisible"/>-->
         </com.skyfishjy.library.RippleBackground>
 
-
+    <!--
         <com.nightonke.boommenu.BoomMenuButton
             android:id="@+id/boom"
             android:layout_width="wrap_content"
@@ -77,6 +84,7 @@
             app:boom_button_color="@color/red"
             app:boom_button_pressed_color="@color/colorPrimary"
             app:boom_inActionBar="false" />
+    -->
 
     </RelativeLayout>
 

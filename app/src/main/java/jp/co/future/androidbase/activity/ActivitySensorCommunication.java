@@ -113,7 +113,7 @@ public class ActivitySensorCommunication extends ActivityUsingBluetooth {
             sensorModule.activate();
         }
         try {
-            Thread.sleep(10000); //3000ミリ秒Sleepする
+            Thread.sleep(15000); //3000ミリ秒Sleepする
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -190,13 +190,13 @@ public class ActivitySensorCommunication extends ActivityUsingBluetooth {
         Logg.d(TAG, "onDestroy");
         super.onDestroy();
 
-        if (sensorModules != null) {
-            for (SensorModule sensorModule : sensorModules) {
-                sensorModule.deactivate();
-            }
-            sensorModules.clear();
-            sensorModules = null;
-        }
+//        if (sensorModules != null) {
+//            for (SensorModule sensorModule : sensorModules) {
+//                sensorModule.deactivate();
+//            }
+//            sensorModules.clear();
+//            sensorModules = null;
+//        }
     }
 
     @Override
@@ -282,7 +282,7 @@ public class ActivitySensorCommunication extends ActivityUsingBluetooth {
 //            target = null;
 //        }
         target = sensorModules.get(0);
-        Log.d(TAG,"target="+target.getName());
+        //Log.d(TAG,"target="+target.getName());
         return target;
     }
 
@@ -476,7 +476,7 @@ public class ActivitySensorCommunication extends ActivityUsingBluetooth {
                     Logg.d(TAG, "[ERROR] sensorModule == null");
                     return;
                 }
-                Log.d(TAG,"updateSensorData:"+sensorModule.enabledSensors);
+                //Log.d(TAG,"updateSensorData:"+sensorModule.enabledSensors);
 //                textInfoData.setText(sensorModule.latestData.makeTextForGUI(sensorModule.enabledSensors));
             }
         });

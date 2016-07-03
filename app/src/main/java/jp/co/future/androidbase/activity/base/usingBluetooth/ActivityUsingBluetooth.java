@@ -64,23 +64,23 @@ public abstract class ActivityUsingBluetooth extends AppCompatActivity {
 	protected void onPause() {
 		super.onPause();
 
-		if (isScanning) {
-			enableScanning(false);
-		}
-
-		if (bluetoothAdapter != null) {
-			bluetoothAdapter = null;
-		}
+//		if (isScanning) {
+//			enableScanning(false);
+//		}
+//
+//		if (bluetoothAdapter != null) {
+//			bluetoothAdapter = null;
+//		}
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
 
-		if (bluetoothStateChangedReceiver != null) {
-			unregisterReceiver(bluetoothStateChangedReceiver);
-			bluetoothStateChangedReceiver = null;
-		}
+//		if (bluetoothStateChangedReceiver != null) {
+//			unregisterReceiver(bluetoothStateChangedReceiver);
+//			bluetoothStateChangedReceiver = null;
+//		}
 	}
 
 	@Override
