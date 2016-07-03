@@ -223,15 +223,17 @@ public class TimelineActivity extends AppCompatActivity implements View.OnClickL
 
         // TODO 音量調整
 
-        AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        float amStreamSystemMaxVol = am.getStreamMaxVolume(am.STREAM_SYSTEM);
-        float amStreamSystemVol = am.getStreamVolume(am.STREAM_SYSTEM);
-        float amStreamSystemRatio = amStreamSystemVol / amStreamSystemMaxVol;
-        Log.d("Volume", "amStreamSystemMaxVol:" + amStreamSystemMaxVol + " amStreamSystemVol:" + amStreamSystemVol + " amStreamSystemRatio:" + amStreamSystemRatio);
+//        AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+//        float amStreamSystemMaxVol = am.getStreamMaxVolume(am.STREAM_SYSTEM);
+//        float amStreamSystemVol = am.getStreamVolume(am.STREAM_SYSTEM);
+//        float amStreamSystemRatio = amStreamSystemVol / amStreamSystemMaxVol;
+//        Log.d("Volume", "amStreamSystemMaxVol:" + amStreamSystemMaxVol + " amStreamSystemVol:" + amStreamSystemVol + " amStreamSystemRatio:" + amStreamSystemRatio);
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put(TextToSpeech.Engine.KEY_PARAM_VOLUME, String.valueOf(amStreamSystemRatio));
+//        params.put(TextToSpeech.Engine.KEY_PARAM_VOLUME, String.valueOf(amStreamSystemRatio));
 
         // 読み上げ開始
+        //AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        //float amStreamSystemMaxVol = am.getStreamMaxVolume(am.STREAM_);
         tts.speak(word, TextToSpeech.QUEUE_FLUSH, params);
 
     }
@@ -239,7 +241,7 @@ public class TimelineActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         EditText txt = (EditText) findViewById(R.id.timeline_input);
-        Log.d(TAG,txt.getText().toString());
+        Log.d(TAG, txt.getText().toString());
 
         // firebaseにデータを登録（サンプル）
         myRef.setValue(txt.getText().toString());

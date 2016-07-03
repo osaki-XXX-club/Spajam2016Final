@@ -278,13 +278,13 @@ public class InitialActivity extends AppCompatActivity
 
         // TODO 音量調整
 
-        AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        float amStreamSystemMaxVol = am.getStreamMaxVolume(am.STREAM_SYSTEM);
-        float amStreamSystemVol = am.getStreamVolume(am.STREAM_SYSTEM);
-        float amStreamSystemRatio = amStreamSystemVol / amStreamSystemMaxVol;
-        Log.d("Volume", "amStreamSystemMaxVol:" + amStreamSystemMaxVol + " amStreamSystemVol:" + amStreamSystemVol + " amStreamSystemRatio:" + amStreamSystemRatio);
+//        AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+//        float amStreamSystemMaxVol = am.getStreamMaxVolume(am.STREAM_SYSTEM);
+//        float amStreamSystemVol = am.getStreamVolume(am.STREAM_SYSTEM);
+//        float amStreamSystemRatio = amStreamSystemVol / amStreamSystemMaxVol;
+//        Log.d("Volume", "amStreamSystemMaxVol:" + amStreamSystemMaxVol + " amStreamSystemVol:" + amStreamSystemVol + " amStreamSystemRatio:" + amStreamSystemRatio);
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put(TextToSpeech.Engine.KEY_PARAM_VOLUME, String.valueOf(amStreamSystemRatio));
+//        params.put(TextToSpeech.Engine.KEY_PARAM_VOLUME, String.valueOf(amStreamSystemRatio));
 
         // 読み上げ開始
         tts.speak(word, TextToSpeech.QUEUE_FLUSH, params);
