@@ -73,7 +73,7 @@ public class CensorActivity extends Activity implements TextToSpeech.OnInitListe
     /**
      * 入力から何秒間経過すると、文字確定するかのしきい値[秒]
      */
-    private static final double INPUT_TERM_THRESHOLD = 0.6;
+    private static final double INPUT_TERM_THRESHOLD = 0.8;
     /**
      * 入力から何秒間通過すると、テキスト確定するかのしきい値[秒]
      */
