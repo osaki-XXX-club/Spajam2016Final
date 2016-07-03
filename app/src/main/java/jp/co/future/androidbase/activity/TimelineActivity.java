@@ -150,8 +150,8 @@ public class TimelineActivity extends AppCompatActivity implements View.OnClickL
 
                 // TODO バイブレーションパターン
                 Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-                // long[] pattern = {3000, 1000, 2000, 5000, 3000, 1000}; // OFF/ON/OFF/ON...
-                long[] pattern = {100, 100}; // OFF/ON/OFF/ON...
+                 long[] pattern = {100, 1000, 100, 2000}; // OFF/ON/OFF/ON...
+                //long[] pattern = {100, 100}; // OFF/ON/OFF/ON...
                 vibrator.vibrate(pattern, -1);
 
                 speechText(value);
@@ -233,7 +233,9 @@ public class TimelineActivity extends AppCompatActivity implements View.OnClickL
 
         // 読み上げ開始
         //AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        //float amStreamSystemMaxVol = am.getStreamMaxVolume(am.STREAM_);
+        //int amStreamSystemMaxVol = am.getStreamMaxVolume(am.STREAM_MUSIC);
+        // 音量を設定
+        //am.setStreamVolume(AudioManager.STREAM_MUSIC, amStreamSystemMaxVol, 0);
         tts.speak(word, TextToSpeech.QUEUE_FLUSH, params);
 
     }

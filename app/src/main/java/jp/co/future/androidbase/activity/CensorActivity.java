@@ -231,6 +231,7 @@ public class CensorActivity extends Activity {
             char hiragana = HIRAGANA_MAP[(touchList.size() - 1) % (HIRAGANA_MAP.length)][(maxPointerCount - 1) % 5];
 
             hiraganaValues.setText("判定された文字：" + hiragana);
+            myRef.setValue(new String(new char[]{hiragana}));
 
             // 入力された文字を追加
             touchInput.setCharset(hiragana);
