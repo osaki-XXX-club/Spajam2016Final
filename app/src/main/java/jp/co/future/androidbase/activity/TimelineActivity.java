@@ -51,6 +51,7 @@ public class TimelineActivity extends AppCompatActivity implements View.OnClickL
 
     //firebase
     private DatabaseReference myRef;
+    private ValueEventListener eventL;
 
     private Button sentBtn;
 
@@ -122,6 +123,7 @@ public class TimelineActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onInit(int status) {
+        Log.d(TAG, "onInit");
         if (TextToSpeech.SUCCESS == status) {
             Locale locale = Locale.JAPAN;
             if (tts.isLanguageAvailable(locale) >= TextToSpeech.LANG_AVAILABLE) {
@@ -133,8 +135,7 @@ public class TimelineActivity extends AppCompatActivity implements View.OnClickL
             Log.d("", "Error Init");
         }
 
-        // Read from the database
-        myRef.addValueEventListener(new ValueEventListener() {
+        eventL = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
@@ -150,7 +151,7 @@ public class TimelineActivity extends AppCompatActivity implements View.OnClickL
 
                 // TODO バイブレーションパターン
                 Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-                 long[] pattern = {100, 1000, 100, 2000}; // OFF/ON/OFF/ON...
+                long[] pattern = {100, 1000, 100, 2000}; // OFF/ON/OFF/ON...
                 //long[] pattern = {100, 100}; // OFF/ON/OFF/ON...
                 vibrator.vibrate(pattern, -1);
 
@@ -162,9 +163,18 @@ public class TimelineActivity extends AppCompatActivity implements View.OnClickL
                 // Failed to read value
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
-        });
+        };
+
+        // Read from the database
+        myRef.addValueEventListener(eventL);
 
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        myRef.removeEventListener(eventL);
     }
 
     @Override
