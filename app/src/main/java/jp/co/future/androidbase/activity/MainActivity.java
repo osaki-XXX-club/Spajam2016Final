@@ -116,6 +116,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent intent = new Intent(this, CensorActivity.class);
+        startActivity(intent);
+
+
         if (savedInstanceState == null) {
             // フラグメントを生成
             fragment = new MainActivityFragment();
