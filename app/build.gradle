@@ -66,6 +66,8 @@ dependencies {
     compile 'com.github.rey5137:material:1.2.4'
 
     compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
+
+    compile 'com.google.android.gms:play-services-appindexing:9.2.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
