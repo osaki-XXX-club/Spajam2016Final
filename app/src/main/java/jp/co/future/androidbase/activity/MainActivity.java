@@ -288,59 +288,61 @@ public class MainActivity extends ActivityUsingBluetooth implements MainActivity
         //メニューボタン
         boomMenuButton = (BoomMenuButton) findViewById(R.id.boom);
 
-        //各メニューが押された時の処理
-        boomMenuButton.setOnSubButtonClickListener(new BoomMenuButton.OnSubButtonClickListener() {
-            @Override
-            public void onClick(int buttonIndex) {
-                // return the index of the sub button clicked
-                if (0 == buttonIndex) {
-                    //BLE切り替え
-                    if (blesearch) {
-                        rippleBackground.stopRippleAnimation();
-                        blesearch = false;
-
-                        foundDevice1.setVisibility(View.INVISIBLE);
-                        foundDevice2.setVisibility(View.INVISIBLE);
-                        foundDevice3.setVisibility(View.INVISIBLE);
-                        foundDevice4.setVisibility(View.INVISIBLE);
-
-
-                        //TODO BLE止める
-                        blePeriodicService.stopResident(getApplicationContext());
-                    } else {
-                        rippleBackground.startRippleAnimation();
-                        blesearch = true;
-
-                        foundDevice1.setVisibility(View.INVISIBLE);
-                        foundDevice2.setVisibility(View.INVISIBLE);
-                        foundDevice3.setVisibility(View.INVISIBLE);
-                        foundDevice4.setVisibility(View.INVISIBLE);
-
-                        //TODO BLEスタート
-                        blePeriodicService.startResident(getApplicationContext());
-                    }
-
-
-                } else if (1 == buttonIndex) {
-                    //マッチング画面遷移
-                    Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-                    long[] pattern = {3000, 1000, 2000, 5000, 3000, 1000}; // OFF/ON/OFF/ON...
-                    vibrator.vibrate(pattern, -1);
-                } else if (2 == buttonIndex) {
-                    //設定画面遷移
-                }
-            }
-        });
+//spajam-first
+//        //各メニューが押された時の処理
+//        boomMenuButton.setOnSubButtonClickListener(new BoomMenuButton.OnSubButtonClickListener() {
+//            @Override
+//            public void onClick(int buttonIndex) {
+//                // return the index of the sub button clicked
+//                if (0 == buttonIndex) {
+//                    //BLE切り替え
+//                    if (blesearch) {
+//                        rippleBackground.stopRippleAnimation();
+//                        blesearch = false;
+//
+//                        foundDevice1.setVisibility(View.INVISIBLE);
+//                        foundDevice2.setVisibility(View.INVISIBLE);
+//                        foundDevice3.setVisibility(View.INVISIBLE);
+//                        foundDevice4.setVisibility(View.INVISIBLE);
+//
+//
+//                        //TODO BLE止める
+//                        blePeriodicService.stopResident(getApplicationContext());
+//                    } else {
+//                        rippleBackground.startRippleAnimation();
+//                        blesearch = true;
+//
+//                        foundDevice1.setVisibility(View.INVISIBLE);
+//                        foundDevice2.setVisibility(View.INVISIBLE);
+//                        foundDevice3.setVisibility(View.INVISIBLE);
+//                        foundDevice4.setVisibility(View.INVISIBLE);
+//
+//                        //TODO BLEスタート
+//                        blePeriodicService.startResident(getApplicationContext());
+//                    }
+//
+//
+//                } else if (1 == buttonIndex) {
+//                    //マッチング画面遷移
+//                    Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+//                    long[] pattern = {3000, 1000, 2000, 5000, 3000, 1000}; // OFF/ON/OFF/ON...
+//                    vibrator.vibrate(pattern, -1);
+//                } else if (2 == buttonIndex) {
+//                    //設定画面遷移
+//                }
+//            }
+//        });
 
 
         //BLEサーチ
         rippleBackground = (RippleBackground) findViewById(R.id.content);
+        rippleBackground.startRippleAnimation();
 
 
-        foundDevice1 = (ImageView) findViewById(R.id.foundDevice1);
-        foundDevice2 = (ImageView) findViewById(R.id.foundDevice2);
-        foundDevice3 = (ImageView) findViewById(R.id.foundDevice3);
-        foundDevice4 = (ImageView) findViewById(R.id.foundDevice4);
+//        foundDevice1 = (ImageView) findViewById(R.id.foundDevice1);
+//        foundDevice2 = (ImageView) findViewById(R.id.foundDevice2);
+//        foundDevice3 = (ImageView) findViewById(R.id.foundDevice3);
+//        foundDevice4 = (ImageView) findViewById(R.id.foundDevice4);
 
         // ble alpus
         listFoundBLEDevices = (ListView) findViewById(R.id.list);
@@ -420,24 +422,25 @@ public class MainActivity extends ActivityUsingBluetooth implements MainActivity
             subButtonColors[i][0] = Util.getInstance().getPressedColor(subButtonColors[i][1]);
         }
 
-        boomMenuButton.init(
-                subButtonDrawables, // The drawables of images of sub buttons. Can not be null.
-                subButtonTexts,     // The texts of sub buttons, ok to be null.
-                subButtonColors,    // The colors of sub buttons, including pressed-state and normal-state.
-                ButtonType.CIRCLE,     // The button type.
-                BoomType.PARABOLA_2,  // The boom type.
-                PlaceType.CIRCLE_3_4,  // The place type.
-                null,               // Ease type to move the sub buttons when showing.
-                null,               // Ease type to scale the sub buttons when showing.
-                null,               // Ease type to rotate the sub buttons when showing.
-                null,               // Ease type to move the sub buttons when dismissing.
-                null,               // Ease type to scale the sub buttons when dismissing.
-                null,               // Ease type to rotate the sub buttons when dismissing.
-                null                // Rotation degree.
-        );
-
-        boomMenuButton.setTextViewColor(ContextCompat.getColor(this, R.color.black));
-        boomMenuButton.setSubButtonShadowOffset(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
+//spajam-first
+//        boomMenuButton.init(
+//                subButtonDrawables, // The drawables of images of sub buttons. Can not be null.
+//                subButtonTexts,     // The texts of sub buttons, ok to be null.
+//                subButtonColors,    // The colors of sub buttons, including pressed-state and normal-state.
+//                ButtonType.CIRCLE,     // The button type.
+//                BoomType.PARABOLA_2,  // The boom type.
+//                PlaceType.CIRCLE_3_4,  // The place type.
+//                null,               // Ease type to move the sub buttons when showing.
+//                null,               // Ease type to scale the sub buttons when showing.
+//                null,               // Ease type to rotate the sub buttons when showing.
+//                null,               // Ease type to move the sub buttons when dismissing.
+//                null,               // Ease type to scale the sub buttons when dismissing.
+//                null,               // Ease type to rotate the sub buttons when dismissing.
+//                null                // Rotation degree.
+//        );
+//
+//        boomMenuButton.setTextViewColor(ContextCompat.getColor(this, R.color.black));
+//        boomMenuButton.setSubButtonShadowOffset(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
 
     }
 
@@ -528,6 +531,7 @@ public class MainActivity extends ActivityUsingBluetooth implements MainActivity
             return;
         }
 
+
 //spajam-finalでは不使用のためコメントアウト
 //        //TODO BLE止める
 //        blePeriodicService.stopResident(getApplicationContext());
@@ -578,7 +582,7 @@ public class MainActivity extends ActivityUsingBluetooth implements MainActivity
             foundDevice4.setVisibility(View.INVISIBLE);
 
             //TODO BLEスタート
-            blePeriodicService.startResident(v.getContext());
+//            blePeriodicService.startResident(v.getContext());
 
             rippleBackground.startRippleAnimation();
 //            final Handler handler = new Handler();
