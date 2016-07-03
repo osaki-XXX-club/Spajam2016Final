@@ -179,7 +179,10 @@ public class InitialActivity extends AppCompatActivity
 
 
                 } else if (1 == buttonIndex) {
-                    // TODO 設定
+                    // TODO タッチ画面
+                    //タイムライン画面遷移
+                    Intent intent = new Intent(getApplicationContext(), CensorActivity.class);
+                    startActivity(intent);
 
                 } else if (2 == buttonIndex) {
                     // ここは使わない
