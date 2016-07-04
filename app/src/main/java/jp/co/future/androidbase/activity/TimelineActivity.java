@@ -104,6 +104,7 @@ public class TimelineActivity extends AppCompatActivity implements View.OnClickL
 
     private void initView() {
         Log.d(TAG, "init");
+        Log.d(TAG,String.valueOf(sayFlg));
 
 
 //        for (int i = 0; i < 20; i++) {
@@ -126,7 +127,7 @@ public class TimelineActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onInit(int status) {
-        sayFlg = false;
+        // sayFlg = false;
         Log.d(TAG, "onInit");
         if (TextToSpeech.SUCCESS == status) {
             Locale locale = Locale.JAPAN;
@@ -153,6 +154,13 @@ public class TimelineActivity extends AppCompatActivity implements View.OnClickL
                 if(sayFlg){
                     speechText(value);
                 }else{
+                    Log.d(TAG,"発話しない");
+                    TimeLineModel model = new TimeLineModel();
+                    model.setName(value);
+                    model.setAge(100);
+                    mDataList.add(model);
+                    mTimeLineAdapter.notifyDataSetChanged();
+                    mRecyclerView.scrollToPosition(mDataList.size()-1);
                     sayFlg = true;
                 }
 
@@ -230,6 +238,7 @@ public class TimelineActivity extends AppCompatActivity implements View.OnClickL
         if (tts.isSpeaking()) {
             // 読み上げ中なら止める
             tts.stop();
+            Log.d(TAG,"読み上げ中");
         }
 
         TimeLineModel model = new TimeLineModel();
